@@ -1,0 +1,12 @@
+{
+    "id": "{C20C0811-0C07-F7CE-3F72-E99AAD0F5837}",
+    "name": "RSCP_Connect",
+    "author": "Philipp Hirzel",
+    "url": "",
+    "compatibility": {
+        "version": "5.5"
+    },
+    "version": "1.0",
+    "build": 0,
+    "date": 0
+}

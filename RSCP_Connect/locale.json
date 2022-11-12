@@ -1,0 +1,42 @@
+{
+    "translations": {
+        "de": {
+            "MQTT-Topic" : "MQTT-Topic",
+            "Ident" : "Ident",
+            "Index" : "Index",
+            "Name" : "Name",
+            "Tag" : "Tag",
+            "MQTT" : "MQTT",
+            "Type" : "Type",
+            "Profile" : "Profile",
+            "Faktor" : "Faktor",
+            "Action" : "Action",
+            "Active" : "Active",
+            "Reset Variables" : "Reset Variables",
+
+            "solar_power" :	"Leistung PV" ,
+            "battery_power" : "Leistung Batterie" ,
+            "home_power" : "Leistung Haus" ,
+            "grid_power" : "Leistung Netz" ,
+            "addon_power" : "Leistung Ext. Quelle", 
+            "battery_rsoc" :"SOC" ,
+            "battery_cycles" : "Batterie Zyklen" ,
+            "battery_status" : "Batterie Status" ,
+            "ems_max_discharge_power" : "Maximale Entladeleistung" ,
+            "ems_max_charge_power" : "Maximale Ladeleistung" ,
+            "ems_wetaher_charge_active" : "Wettergeführtes Laden" ,
+            "ems_set_power_power" :	"Aktueller Set Power Wert" ,
+            "system_software" :	"Software Version" ,
+            "system_peak_power" : "Installierte Leistung" ,
+            "ems_mode" : "EMS Modus" ,
+            "ems_charging_lock" : "Ladesperre" ,
+            "ems_discharging_lock" : "Entladesperre" ,
+            "ems_emergency_power_available"	: "Notsrom verfügbar" ,
+            "ems_charging_throttled" : "Ladung begrenz" ,
+            "grid_in_limit" : "Einspeisung Limitiert" ,
+            "ems_charging_time_lock" : "Lade Sperrzeit" ,
+            "ems_discharging_time_lockr" : "Entlade Sperrzeit" ,
+            "ems_coupling_mode" : "Betriebsmodus" 
+        }
+    }
+}

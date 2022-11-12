@@ -1,0 +1,98 @@
+{
+    "elements": [
+        {
+            "type": "ValidationTextBox",
+            "name": "TOPIC",
+            "caption": "MQTT-Topic",
+            "enabled": false
+        },
+        {
+            "type": "List",
+            "name": "Variables",
+            "caption": "",
+            "add": false,
+            "delete": false,
+            "columns": [
+                {
+                    "caption": "Ident",
+                    "name": "Ident",
+                    "visible": false,
+                    "width": "0px",
+                    "save": true
+                },
+                {
+                    "caption": "Index",
+                    "name": "Pos",
+                    "width": "100px",
+                    "save": true
+                },
+                {
+                    "caption": "Name",
+                    "name": "Name",
+                    "width": "180px",
+                    "save": true
+                },
+                {
+                    "caption": "Tag",
+                    "name": "Tag",
+                    "width": "auto",
+                    "save": true
+                },
+                {
+                    "caption": "MQTT",
+                    "name": "MQTT",
+                    "visible": false,
+                    "width": "auto",
+                    "save": true
+                },
+                {
+                    "caption": "Type",
+                    "name": "VarType",
+                    "visible": false,
+                    "width": "0px",
+                    "save": true
+                },
+                {
+                    "caption": "Profile",
+                    "name": "Profile",
+                    "visible": false,
+                    "width": "0px",
+                    "save": true
+                },
+                {
+                    "caption": "Faktor",
+                    "name": "Factor",
+                    "visible": false,
+                    "width": "0px",
+                    "save": true
+                },
+                {
+                    "caption": "Action",
+                    "name": "Action",
+                    "visible": false,
+                    "width": "0px",
+                    "save": true
+                },
+                {
+                    "caption": "Active",
+                    "name": "Keep",
+                    "width": "75px",
+                    "edit": {
+                        "caption": "Active",
+                        "type": "CheckBox"
+                    }
+                }
+                    ]
+        }
+        ],
+    "actions": 
+    [
+        {
+            "type": "Button",
+            "label": "Reset Variables",
+            "onClick": "RSCP_resetVariables($id);"
+          }
+    ],
+    "status": 
+    []
+}
