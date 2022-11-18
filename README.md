@@ -21,6 +21,8 @@ Der Hauptaugenmerk liegt zu Beginn bei dem Modul auf der Steuerung des Hauskraft
 
 Es werden aber nach und nach weitere Status Variablen/Werte integriert werden.
 
+Grundsätzlich kann natürlich auch jede andere Software genutzt werden, welche auch die RSCP Werte per MQTT bereitstellt. Das Modul erwartet die Werte im aktuellen Versionsstand allerdings in den von RSCP2MQTT definierten Topics.
+
 ## 2. Systemanforderungen
 - IP-Symcon ab Version 5.5
 
@@ -135,6 +137,6 @@ Dieser Befehl versetzt das Hauskraftwerk in den "NETZLADE" Mode, es wird in dem 
 ## 5. ChangeLog
 Änderungshistorie
 
-### Version 1.0
+### Version 0.8 Beta
 * Initialer Commit
   
