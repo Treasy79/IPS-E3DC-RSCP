@@ -25,6 +25,7 @@
             "ems_max_discharge_power" : "Maximale Entladeleistung" ,
             "ems_max_charge_power" : "Maximale Ladeleistung" ,
             "ems_wetaher_charge_active" : "Wettergeführtes Laden" ,
+            "ems_power_limits_used" : "Manuelle Lade-/Entladeleistung aktiv ",
             "ems_set_power_power" :	"Aktueller Set Power Wert" ,
             "system_software" :	"Software Version" ,
             "system_peak_power" : "Installierte Leistung" ,
@@ -36,7 +37,7 @@
             "grid_in_limit" : "Einspeisung Limitiert" ,
             "ems_charging_time_lock" : "Lade Sperrzeit" ,
             "ems_discharging_time_lockr" : "Entlade Sperrzeit" ,
-            "ems_coupling_mode" : "Betriebsmodus" 
+            "ems_coupling_mode" : "Betriebsmodus"
         }
     }
 }
