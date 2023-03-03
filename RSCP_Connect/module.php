@@ -337,6 +337,7 @@ declare(strict_types=1);
 			['ems_max_discharge_power'		, 'TAG_EMS_MAX_DISCHARGE_POWER'				, '/ems/max_discharge/power'		, VARIABLETYPE_INTEGER, 'RSCP.Power.W.i'		,  1	, false, true],
 			['ems_max_charge_power'			, 'TAG_EMS_MAX_CHARGE_POWER'				, '/ems/max_charge/power'			, VARIABLETYPE_INTEGER, 'RSCP.Power.W.i'		,  1	, false, true],
 			['ems_wetaher_charge_active'	, 'TAG_EMS_WEATHER_REGULATED_CHARGE_ENABLED', '/ems/weather_regulation'			, VARIABLETYPE_BOOLEAN, '~Switch'	 			,  1	, false, true],
+			['ems_power_limits_used'		, 'TAG_EMS_POWER_LIMITS_USED'				, '/ems/power_limits'				, VARIABLETYPE_BOOLEAN, '~Switch'	 			,  1	, false, true],
 			['ems_set_power_power'			, 'TAG_EMS_SET_POWER'						, '/ems/set_power/power'			, VARIABLETYPE_INTEGER, 'RSCP.Power.W.i'		,  1	, false, true],
 			['system_software'				, 'TAG_INFO_SW_RELEASE'						, '/system/software'				, VARIABLETYPE_STRING, 	''  		 			,  1	, false, true],
 			['system_peak_power'			, 'TAG_EMS_INSTALLED_PEAK_POWER'			, '/system/installed_peak_power'	, VARIABLETYPE_INTEGER, ''						,  1	, false, true],
