@@ -177,9 +177,9 @@ declare(strict_types=1);
 		{	
 			$Topic = 'e3dc/set/weather_regulation';
 			if ($value)
-				$Payload = 'true';
+				$Payload = '1';
 			else
-				$Payload = 'false';
+				$Payload = '0';
 			$this->sendMQTT($Topic, $Payload);
 		}
 
@@ -187,9 +187,9 @@ declare(strict_types=1);
 		{	
 			$Topic = 'e3dc/set/power_limits';
 			if ($value)
-				$Payload = 'true';
+				$Payload = '1';
 			else
-				$Payload = 'false';
+				$Payload = '0';
 			$this->sendMQTT($Topic, $Payload);
 		}
 
