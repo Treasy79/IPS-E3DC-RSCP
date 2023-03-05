@@ -282,6 +282,14 @@ declare(strict_types=1);
 				IPS_SetVariableProfileValues("RSCP.SOC", 0, 100, 1);
 				IPS_SetVariableProfileText("RSCP.SOC", "", "%");
 			}
+			if (!IPS_VariableProfileExists('RSCP.Percent')) {
+				IPS_CreateVariableProfile('RSCP.Percent', 2);
+				IPS_SetVariableProfileDigits("RSCP.Percent", 1);
+				IPS_SetVariableProfileValues("RSCP.Percent", 0, 100, 1);
+				IPS_SetVariableProfileText("RSCP.Percent", "", "%");
+			}
+
+
 		}
 
 		private function registerVariables()
@@ -375,6 +383,10 @@ declare(strict_types=1);
 			['ems_discharging_time_lockr'	, 'TAG_EMS_STATUS'							, '/ems/discharging_time_lock'		, VARIABLETYPE_BOOLEAN, '~Switch'	 			,  1	, false, true],
 			['ems_coupling_mode'			, 'TAG_EMS_COUPLING_MODE'					, '/coupling/mode'					, VARIABLETYPE_INTEGER, 'RSCP.Coupling.Mode' 	,  1	, false, true],
 			
+			['autarky'						, 'TAG_EMS_AUTARKY'							, '/autarky'						, VARIABLETYPE_FLOAT, 	'RSCP.Percent' 			,  1	, false, true],
+			['consumed'						, 'TAG_EMS_CONSUMED'						, '/consumed'						, VARIABLETYPE_FLOAT, 	'RSCP.Percent' 			,  1	, false, true],
+			['pvi_power_string1'			, 'TAG_PVI_DC_POWER'						, '/pvi/power/string_1'				, VARIABLETYPE_FLOAT, 	'RSCP.Power.W' 			,  1	, false, false],
+			['pvi_power_string2'			, 'TAG_PVI_DC_POWER'						, '/pvi/power/string_2'				, VARIABLETYPE_FLOAT, 	'RSCP.Power.W' 			,  1	, false, false],
 		];
 	}	
 	

@@ -37,7 +37,11 @@
             "grid_in_limit" : "Einspeisung Limitiert" ,
             "ems_charging_time_lock" : "Lade Sperrzeit" ,
             "ems_discharging_time_lockr" : "Entlade Sperrzeit" ,
-            "ems_coupling_mode" : "Betriebsmodus"
+            "ems_coupling_mode" : "Betriebsmodus",
+            "autarky":"Autarkie",
+            "consumed":"Eigenverbrauch",
+            "pvi_power_string1":"DC String 1",
+            "pvi_power_string2":"DC String 2"
         }
     }
 }
