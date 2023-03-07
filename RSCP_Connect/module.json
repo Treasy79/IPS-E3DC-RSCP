@@ -1,6 +1,6 @@
 {
     "id": "{6DED6FFA-D1ED-CEFC-8B48-FCE2475AD4DA}",
-    "name": "RSCP_Connect",
+    "name": "RSCP2MQTT_Connect",
     "type": 3,
     "vendor": "E3DC",
     "aliases": [],
@@ -11,6 +11,6 @@
     "implemented": [
         "{7F7632D9-FA40-4F38-8DEA-C83CD4325A32}"
     ],
-    "prefix": "RSCP",
+    "prefix": "RSCP2MQTT",
     "url": ""
 }

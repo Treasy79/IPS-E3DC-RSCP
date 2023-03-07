@@ -1,120 +1,13 @@
 <?php
 
 declare(strict_types=1);
-	class RSCP_Connect extends IPSModule
+require_once __DIR__ . '/../libs/RSCPModule.php';
+
+	class RSCP2MQTT_Connect extends RSCPModule
 	{
-		public function Create()
-		{
-			//Never delete this line!
-			parent::Create();
-			$this->ConnectParent('{C6D2AEB3-6E1F-4B2E-8E69-3A1A00246850}');
+		
 
-
-			$this->RegisterPropertyString("TOPIC", 'e3dc');
-
-			$Variables = [];
-        	foreach (static::$Variables as $Pos => $Variable) {
-				$Variables[] = [
-					'Ident'        => str_replace(' ', '', $Variable[0]),
-					'Name'         => $this->Translate($Variable[0]),
-					'Tag'		   => $Variable[1],
-					'MQTT'		   => $Variable[2],
-					'VarType'      => $Variable[3],
-					'Profile'      => $Variable[4],
-					'Factor'       => $Variable[5],
-					'Action'       => $Variable[6],
-					'Pos'          => $Pos + 1,
-					'Keep'         => $Variable[7]
-				];
-        	}	
-			$this->RegisterPropertyString('Variables', json_encode($Variables));
-		}
-
-		public function Destroy()
-		{
-			//Never delete this line!
-			parent::Destroy();
-			
-		}
-
-		public function ApplyChanges()
-		{
-			//Never delete this line!
-			parent::ApplyChanges();
-
-			$this->ConnectParent('{C6D2AEB3-6E1F-4B2E-8E69-3A1A00246850}');
-
-			//Setze Filter für ReceiveData
-			$MQTTTopic = $this->ReadPropertyString('TOPIC');
-			$this->SetReceiveDataFilter('.*' . $MQTTTopic . '.*');
-	
-			$this->registerProfiles();
-			$this->registerVariables();
-		}
-
-		public function ReceiveData($JSONString)
-		{
-			$this->SendDebug('JSON', $JSONString, 0);
-        	if (!empty($this->ReadPropertyString('TOPIC'))) {
-
-				if ($JSONString == '') {
-					$this->log('No JSON');
-					return true;
-				}
-
-				$data = json_decode($JSONString);
-
-				switch ($data->DataID) {
-					case '{7F7632D9-FA40-4F38-8DEA-C83CD4325A32}': // MQTT Server
-						$Buffer = $data;
-						break;
-					default:
-						$this->LogMessage('Invalid Parent', KL_ERROR);
-						return;
-				}
-				$this->SendDebug('MQTT Topic', $Buffer->Topic, 0);
-
-				if (property_exists($Buffer, 'Topic')) {
-					$Variables = json_decode($this->ReadPropertyString('Variables'), true);
-					foreach ($Variables as $Variable) {
-						if (fnmatch( $this->readPropertyString('TOPIC').$Variable['MQTT'], $Buffer->Topic)) {
-							$this->SendDebug($Variable['MQTT'], $Buffer->Payload, 0);
-							if ($Variable['Factor'] == 1){
-								$this->SetValue($Variable['Ident'], $Buffer->Payload); 
-							} 
-							else {
-								$this->SetValue($Variable['Ident'], $Buffer->Payload * $Variable['Factor']); 
-							}   	
-						}   
-					}
-				}
-			}
-		}
-
-		public function resetVariables()
-		{
-			$NewRows = static::$Variables;
-			$Variables = [];
-			foreach ($NewRows as $Pos => $Variable) {
-				$Variables[] = [
-					'Ident'        => str_replace(' ', '', $Variable[0]),
-					'Name'         => $this->Translate($Variable[0]),
-					'Tag'		   => $Variable[1],
-					'MQTT'		   => $Variable[2],
-					'VarType'      => $Variable[3],
-					'Profile'      => $Variable[4],
-					'Factor'	   => $Variable[5],
-					'Action'       => $Variable[6],
-					'Pos'          => $Pos + 1,
-					'Keep'         => $Variable[7]
-				];
-			}
-			IPS_SetProperty($this->InstanceID, 'Variables', json_encode($Variables));
-			IPS_ApplyChanges($this->InstanceID);
-			return;
-		}
-
-		/////////// Commands for E3DC RSCP /////////////
+		/////////// Commands for E3DC RSCP2MQTT /////////////
 
 		public function force_update()
 		{
@@ -232,161 +125,49 @@ declare(strict_types=1);
 			}
 		}
 
-		// Private & Protected Methods
-		private function registerProfiles()
-		{
-			//Create required Profiles
+		// Mapping Definition für die MQTT Werte - RSCP2MQTT
+		public static $Variables = [
+		// 	NSPACE  	POS		IDENT							RSCP TAG 									MQTT Topic								Variablen Typ			Var Profil	  			Faktor  ACTION  KEEP
+			// EMS
+			['HEADER'	,100	,'EMS'							, ''										, ''									, ''				, 	''						,  1	, false, false],
+			['EMS'		,101	,'solar_power'					, 'TAG_EMS_POWER_PV'						, 'e3dc/solar/power'					, VARIABLETYPE_FLOAT, 	'RSCP.Power.W'			,  1	, false, true],
+			['EMS'		,102	,'battery_power'				, 'TAG_EMS_POWER_BAT' 						, 'e3dc/battery/power'					, VARIABLETYPE_FLOAT, 	'RSCP.Power.W'			,  1	, false, true],
+			['EMS'		,103	,'home_power'					, 'TAG_EMS_POWER_HOME'						, 'e3dc/home/power'						, VARIABLETYPE_FLOAT, 	'RSCP.Power.W'			,  1	, false, true],
+			['EMS'		,104	,'grid_power'					, 'TAG_EMS_POWER_GRID'						, 'e3dc/grid/power'						, VARIABLETYPE_FLOAT, 	'RSCP.Power.W'			,  1	, false, true],
+			['EMS'		,105	,'addon_power'					, 'TAG_EMS_POWER_ADD'						, 'e3dc/addon/power'					, VARIABLETYPE_FLOAT, 	'RSCP.Power.W'			, -1	, false, true],
+			['EMS'		,110	,'ems_max_discharge_power'		, 'TAG_EMS_MAX_DISCHARGE_POWER'				, 'e3dc/ems/max_discharge/power'		, VARIABLETYPE_INTEGER, 'RSCP.Power.W.i'		,  1	, true , true],
+			['EMS'		,111	,'ems_max_charge_power'			, 'TAG_EMS_MAX_CHARGE_POWER'				, 'e3dc/ems/max_charge/power'			, VARIABLETYPE_INTEGER, 'RSCP.Power.W.i'		,  1	, true , true],
+			['EMS'		,112	,'ems_power_limits_used'		, 'TAG_EMS_POWER_LIMITS_USED'				, 'e3dc/ems/power_limits'				, VARIABLETYPE_BOOLEAN, '~Switch'	 			,  1	, true , true],
+			['EMS'		,113	,'ems_wetaher_charge_active'	, 'TAG_EMS_WEATHER_REGULATED_CHARGE_ENABLED', 'e3dc/ems/weather_regulation'			, VARIABLETYPE_BOOLEAN, '~Switch'	 			,  1	, true , true],
+			['EMS'		,120	,'ems_charging_lock'			, 'TAG_EMS_STATUS'							, 'e3dc/ems/charging_lock'				, VARIABLETYPE_BOOLEAN, '~Switch'	 			,  1	, false, true],
+			['EMS'		,121	,'ems_discharging_lock'			, 'TAG_EMS_STATUS'							, 'e3dc/ems/discharging_lock'			, VARIABLETYPE_BOOLEAN, '~Switch'	 			,  1	, false, true],
+			['EMS'		,122	,'ems_emergency_power_available', 'TAG_EMS_STATUS'							, 'e3dc/ems/emergency_power_available'	, VARIABLETYPE_BOOLEAN, '~Switch'	 			,  1	, false, true],
+			['EMS'		,123	,'ems_charging_throttled'		, 'TAG_EMS_STATUS'							, 'e3dc/ems/charging_throttled'			, VARIABLETYPE_BOOLEAN, '~Switch'	 			,  1	, false, true],
+			['EMS'		,124	,'grid_in_limit'				, 'TAG_EMS_STATUS'							, 'e3dc/grid_in_limit'					, VARIABLETYPE_BOOLEAN, '~Switch'	 			,  1	, false, true],
+			['EMS'		,125	,'ems_charging_time_lock'		, 'TAG_EMS_STATUS'							, 'e3dc/ems/charging_time_lock'			, VARIABLETYPE_BOOLEAN, '~Switch'	 			,  1	, false, true],
+			['EMS'		,126	,'ems_discharging_time_lockr'	, 'TAG_EMS_STATUS'							, 'e3dc/ems/discharging_time_lock'		, VARIABLETYPE_BOOLEAN, '~Switch'	 			,  1	, false, true],
+			['EMS'		,130	,'autarky'						, 'TAG_EMS_AUTARKY'							, 'e3dc/autarky'						, VARIABLETYPE_FLOAT, 	'RSCP.Percent' 			,  1	, false, true],
+			['EMS'		,131	,'consumed'						, 'TAG_EMS_CONSUMED'						, 'e3dc/consumed'						, VARIABLETYPE_FLOAT, 	'RSCP.Percent' 			,  1	, false, true],
+			['EMS'		,140	,'ems_set_power_power'			, 'TAG_EMS_SET_POWER'						, 'e3dc/ems/set_power/power'			, VARIABLETYPE_INTEGER, 'RSCP.Power.W.i'		,  1	, false, true],
+			['EMS'		,150	,'ems_mode'						, 'TAG_EMS_MODE'							, 'e3dc/mode'							, VARIABLETYPE_INTEGER, 'RSCP.EMS.Mode'  		,  1	, false, true],
+			['EMS'		,151	,'ems_coupling_mode'			, 'TAG_EMS_COUPLING_MODE'					, 'e3dc/coupling/mode'					, VARIABLETYPE_INTEGER, 'RSCP.Coupling.Mode' 	,  1	, false, true],
+			['EMS'		,152	,'system_peak_power'			, 'TAG_EMS_INSTALLED_PEAK_POWER'			, 'e3dc/system/installed_peak_power'	, VARIABLETYPE_INTEGER, ''						,  1	, false, true],
 
-			if (!IPS_VariableProfileExists('RSCP.Power.Mode')) {
-				IPS_CreateVariableProfile('RSCP.Power.Mode', 1);
-				IPS_SetVariableProfileIcon('RSCP.Power.Mode', 'Ok');
-				IPS_SetVariableProfileAssociation("RSCP.Power.Mode", 0, "Auto/Normal", "", 0xFFFFFF);
-				IPS_SetVariableProfileAssociation("RSCP.Power.Mode", 1, "Idle", "", 0xFFFFFF);
-				IPS_SetVariableProfileAssociation("RSCP.Power.Mode", 2, "Entladen", "", 0xFFFFFF);
-				IPS_SetVariableProfileAssociation("RSCP.Power.Mode", 3, "Laden", "", 0xFFFFFF);
-				IPS_SetVariableProfileAssociation("RSCP.Power.Mode", 4, "Netz Laden", "", 0xFFFFFF);
-			}
-			if (!IPS_VariableProfileExists('RSCP.Coupling.Mode')) {
-				IPS_CreateVariableProfile('RSCP.Coupling.Mode', 1);
-				IPS_SetVariableProfileIcon('RSCP.Coupling.Mode', 'Ok');
-				IPS_SetVariableProfileAssociation("RSCP.Coupling.Mode", 0, "DC", "", 0xFFFFFF);
-				IPS_SetVariableProfileAssociation("RSCP.Coupling.Mode", 1, "DC-MultiWR", "", 0xFFFFFF);
-				IPS_SetVariableProfileAssociation("RSCP.Coupling.Mode", 2, "AC", "", 0xFFFFFF);
-				IPS_SetVariableProfileAssociation("RSCP.Coupling.Mode", 3, "Hybrid", "", 0xFFFFFF);
-				IPS_SetVariableProfileAssociation("RSCP.Coupling.Mode", 4, "Insel", "", 0xFFFFFF);
-			}
-			if (!IPS_VariableProfileExists('RSCP.EMS.Mode')) {
-				IPS_CreateVariableProfile('RSCP.EMS.Mode', 1);
-				IPS_SetVariableProfileIcon('RSCP.EMS.Mode', 'Ok');
-				IPS_SetVariableProfileAssociation("RSCP.EMS.Mode", 0, "Idle", "", 0xFFFFFF);
-				IPS_SetVariableProfileAssociation("RSCP.EMS.Mode", 1, "Entladen", "", 0xFF0000);
-				IPS_SetVariableProfileAssociation("RSCP.EMS.Mode", 2, "Laden", "", 0x008000);
-			}
-			if (!IPS_VariableProfileExists('RSCP.Power.W.i')) {
-				IPS_CreateVariableProfile('RSCP.Power.W.i', 1);
-				IPS_SetVariableProfileIcon('RSCP.Power.W.i', 'Energy');
-				IPS_SetVariableProfileValues("RSCP.Power.W.i", 0, 50000, 500);
-				IPS_SetVariableProfileText("RSCP.Power.W.i", "", " W");
-			}
-			if (!IPS_VariableProfileExists('RSCP.Power.W')) {
-				IPS_CreateVariableProfile('RSCP.Power.W', 2);
-				IPS_SetVariableProfileIcon('RSCP.Power.W', 'Energy');
-				IPS_SetVariableProfileDigits("RSCP.Power.W", 0);
-				IPS_SetVariableProfileValues("RSCP.Power.W", 0, 50000, 0 );
-				IPS_SetVariableProfileText("RSCP.Power.W", "", " W");
-			}
-			if (!IPS_VariableProfileExists('RSCP.SOC')) {
-				IPS_CreateVariableProfile('RSCP.SOC', 2);
-				IPS_SetVariableProfileIcon('RSCP.SOC', 'Battery');
-				IPS_SetVariableProfileDigits("RSCP.SOC", 1);
-				IPS_SetVariableProfileValues("RSCP.SOC", 0, 100, 1);
-				IPS_SetVariableProfileText("RSCP.SOC", "", "%");
-			}
-			if (!IPS_VariableProfileExists('RSCP.Percent')) {
-				IPS_CreateVariableProfile('RSCP.Percent', 2);
-				IPS_SetVariableProfileDigits("RSCP.Percent", 1);
-				IPS_SetVariableProfileValues("RSCP.Percent", 0, 100, 1);
-				IPS_SetVariableProfileText("RSCP.Percent", "", "%");
-			}
-
-
-		}
-
-		private function registerVariables()
-		{
-
-			$NewRows = static::$Variables;
-			$NewPos = 0;
-			$this->SendDebug('Variablen', $this->ReadPropertyString('Variables'), 0);
-			$Variables = json_decode($this->ReadPropertyString('Variables'), true);
-			foreach ($Variables as $Variable) {
-				@$this->MaintainVariable($Variable['Ident'], $Variable['Name'], $Variable['VarType'], $Variable['Profile'], $Variable['Pos'], $Variable['Keep']);
-				if ($Variable['Action'] && $Variable['Keep']) {
-					$this->EnableAction($Variable['Ident']);
-				}
-				foreach ($NewRows as $Index => $Row) {
-					if ($Variable['Ident'] == str_replace(' ', '', $Row[0])) {
-						unset($NewRows[$Index]);
-					}
-				}
-				if ($NewPos < $Variable['Pos']) {
-					$NewPos = $Variable['Pos'];
-				}
-			}
-
-			if (count($NewRows) != 0) {
-				foreach ($NewRows as $NewVariable) {
-					$Variables[] = [
-						'Ident'        => str_replace(' ', '', $NewVariable[0]),
-						'Name'         => $this->Translate($NewVariable[0]),
-						'Tag'		   => $NewVariable[1],
-						'MQTT'		   => $NewVariable[2],
-						'VarType'      => $NewVariable[3],
-						'Profile'      => $NewVariable[4],
-						'Factor'       => $NewVariable[5],
-						'Action'       => $NewVariable[6],
-						'Pos'          => ++$NewPos,
-						'Keep'         => $NewVariable[7]
-					];
-				}
-				IPS_SetProperty($this->InstanceID, 'Variables', json_encode($Variables));
-				IPS_ApplyChanges($this->InstanceID);
-				return;
-        	}
-		}
-
-		protected function sendMQTT($Topic, $Payload)
-		{
-			$mqtt['DataID'] = '{043EA491-0325-4ADD-8FC2-A30C8EEB4D3F}';
-			$mqtt['PacketType'] = 3;
-			$mqtt['QualityOfService'] = 0;
-			$mqtt['Retain'] = false;
-			$mqtt['Topic'] = $Topic;
-			$mqtt['Payload'] = $Payload;
-			$mqttJSON = json_encode($mqtt, JSON_UNESCAPED_SLASHES);
-			$mqttJSON = json_encode($mqtt);
-			$this->SendDebug(__FUNCTION__ . 'MQTT', $mqttJSON, 0);
-			$result = @$this->SendDataToParent($mqttJSON);
-			$this->SendDebug(__FUNCTION__ . 'MQTT', $result, 0);
-
-			if ($result === false ) {
-				$last_error = error_get_last();
-				echo $last_error['message'];
-			}
-		}
-
-		// Mapping Definition für die MQTT Werte
-		private static $Variables = [
-			// IDENT							RSCP TAG 									MQTT Topic (ohne e3dc)				Variablen Typ		Var Profil	  			Faktor  ACTION  KEEP
-			['solar_power'					, 'TAG_EMS_POWER_PV'						, '/solar/power'					, VARIABLETYPE_FLOAT, 	'RSCP.Power.W'			,  1	, false, true],
-			['battery_power'				, 'TAG_EMS_POWER_BAT' 						, '/battery/power'					, VARIABLETYPE_FLOAT, 	'RSCP.Power.W'			,  1	, false, true],
-			['home_power'					, 'TAG_EMS_POWER_HOME'						, '/home/power'						, VARIABLETYPE_FLOAT, 	'RSCP.Power.W'			,  1	, false, true],
-			['grid_power'					, 'TAG_EMS_POWER_GRID'						, '/grid/power'						, VARIABLETYPE_FLOAT, 	'RSCP.Power.W'			,  1	, false, true],
-			['addon_power'					, 'TAG_EMS_POWER_ADD'						, '/addon/power'					, VARIABLETYPE_FLOAT, 	'RSCP.Power.W'			, -1	, false, true],
-			['battery_rsoc'					, 'TAG_BAT_RSOC'							, '/battery/rsoc'					, VARIABLETYPE_FLOAT, 	'RSCP.SOC'				,  1	, false, true],
-			['battery_cycles'				, 'TAG_BAT_CHARGE_CYCLES'					, '/battery/cycles'					, VARIABLETYPE_INTEGER, ''  		 			,  1	, false, true],
-			['battery_status'				, 'TAG_BAT_STATUS_CODE'						, '/battery/status'					, VARIABLETYPE_INTEGER, ''  		 			,  1	, false, true],
-			['ems_max_discharge_power'		, 'TAG_EMS_MAX_DISCHARGE_POWER'				, '/ems/max_discharge/power'		, VARIABLETYPE_INTEGER, 'RSCP.Power.W.i'		,  1	, true , true],
-			['ems_max_charge_power'			, 'TAG_EMS_MAX_CHARGE_POWER'				, '/ems/max_charge/power'			, VARIABLETYPE_INTEGER, 'RSCP.Power.W.i'		,  1	, true , true],
-			['ems_wetaher_charge_active'	, 'TAG_EMS_WEATHER_REGULATED_CHARGE_ENABLED', '/ems/weather_regulation'			, VARIABLETYPE_BOOLEAN, '~Switch'	 			,  1	, true , true],
-			['ems_power_limits_used'		, 'TAG_EMS_POWER_LIMITS_USED'				, '/ems/power_limits'				, VARIABLETYPE_BOOLEAN, '~Switch'	 			,  1	, true , true],
-			['ems_set_power_power'			, 'TAG_EMS_SET_POWER'						, '/ems/set_power/power'			, VARIABLETYPE_INTEGER, 'RSCP.Power.W.i'		,  1	, false, true],
-			['system_software'				, 'TAG_INFO_SW_RELEASE'						, '/system/software'				, VARIABLETYPE_STRING, 	''  		 			,  1	, false, true],
-			['system_peak_power'			, 'TAG_EMS_INSTALLED_PEAK_POWER'			, '/system/installed_peak_power'	, VARIABLETYPE_INTEGER, ''						,  1	, false, true],
-			['ems_mode'						, 'TAG_EMS_MODE'							, '/mode'							, VARIABLETYPE_INTEGER, 'RSCP.EMS.Mode'  		,  1	, false, true],
-			['ems_charging_lock'			, 'TAG_EMS_STATUS'							, '/ems/charging_lock'				, VARIABLETYPE_BOOLEAN, '~Switch'	 			,  1	, false, true],
-			['ems_discharging_lock'			, 'TAG_EMS_STATUS'							, '/ems/discharging_lock'			, VARIABLETYPE_BOOLEAN, '~Switch'	 			,  1	, false, true],
-			['ems_emergency_power_available', 'TAG_EMS_STATUS'							, '/ems/emergency_power_available'	, VARIABLETYPE_BOOLEAN, '~Switch'	 			,  1	, false, true],
-			['ems_charging_throttled'		, 'TAG_EMS_STATUS'							, '/ems/charging_throttled'			, VARIABLETYPE_BOOLEAN, '~Switch'	 			,  1	, false, true],
-			['grid_in_limit'				, 'TAG_EMS_STATUS'							, '/grid_in_limit'					, VARIABLETYPE_BOOLEAN, '~Switch'	 			,  1	, false, true],
-			['ems_charging_time_lock'		, 'TAG_EMS_STATUS'							, '/ems/charging_time_lock'			, VARIABLETYPE_BOOLEAN, '~Switch'	 			,  1	, false, true],
-			['ems_discharging_time_lockr'	, 'TAG_EMS_STATUS'							, '/ems/discharging_time_lock'		, VARIABLETYPE_BOOLEAN, '~Switch'	 			,  1	, false, true],
-			['ems_coupling_mode'			, 'TAG_EMS_COUPLING_MODE'					, '/coupling/mode'					, VARIABLETYPE_INTEGER, 'RSCP.Coupling.Mode' 	,  1	, false, true],
+			// Battery
+			['HEADER'	,200	,'BATTERY'						, ''										, ''									, ''				, 	''						,  1	, false, false],
+			['BAT'		,201	,'battery_rsoc'					, 'TAG_BAT_RSOC'							, 'e3dc/battery/rsoc'					, VARIABLETYPE_FLOAT, 	'RSCP.SOC'				,  1	, false, true],
+			['BAT'		,202	,'battery_cycles'				, 'TAG_BAT_CHARGE_CYCLES'					, 'e3dc/battery/cycles'					, VARIABLETYPE_INTEGER, ''  		 			,  1	, false, true],
+			['BAT'		,203	,'battery_status'				, 'TAG_BAT_STATUS_CODE'						, 'e3dc/battery/status'					, VARIABLETYPE_INTEGER, ''  		 			,  1	, false, true],
 			
-			['autarky'						, 'TAG_EMS_AUTARKY'							, '/autarky'						, VARIABLETYPE_FLOAT, 	'RSCP.Percent' 			,  1	, false, true],
-			['consumed'						, 'TAG_EMS_CONSUMED'						, '/consumed'						, VARIABLETYPE_FLOAT, 	'RSCP.Percent' 			,  1	, false, true],
-			['pvi_power_string1'			, 'TAG_PVI_DC_POWER'						, '/pvi/power/string_1'				, VARIABLETYPE_FLOAT, 	'RSCP.Power.W' 			,  1	, false, false],
-			['pvi_power_string2'			, 'TAG_PVI_DC_POWER'						, '/pvi/power/string_2'				, VARIABLETYPE_FLOAT, 	'RSCP.Power.W' 			,  1	, false, false],
+			// PVI
+			['HEADER'	,300	,'PVI'							, ''										, ''									, ''				, 	''						,  1	, false, false],
+			['PVI'		,301	,'pvi_power_string1'			, 'TAG_PVI_DC_POWER'						, 'e3dc/pvi/power/string_1'				, VARIABLETYPE_FLOAT, 	'RSCP.Power.W' 			,  1	, false, false],
+			['PVI'		,302	,'pvi_power_string2'			, 'TAG_PVI_DC_POWER'						, 'e3dc/pvi/power/string_2'				, VARIABLETYPE_FLOAT, 	'RSCP.Power.W' 			,  1	, false, false],
+
+			// INFO
+			['HEADER'	,900	,'INFO'		 					, ''										, ''									, ''				, 	''						,  1	, false, false],
+			['INFO'		,901	,'system_software'				, 'TAG_INFO_SW_RELEASE'						, 'e3dc/system/software'				, VARIABLETYPE_STRING, 	''  		 			,  1	, false, true],
+			
 		];
 	}	
 	
