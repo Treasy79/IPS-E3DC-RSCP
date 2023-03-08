@@ -164,6 +164,15 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 			['PVI'		,301	,'pvi_power_string1'			, 'TAG_PVI_DC_POWER'						, 'e3dc/pvi/power/string_1'				, VARIABLETYPE_FLOAT, 	'RSCP.Power.W' 			,  1	, false, false],
 			['PVI'		,302	,'pvi_power_string2'			, 'TAG_PVI_DC_POWER'						, 'e3dc/pvi/power/string_2'				, VARIABLETYPE_FLOAT, 	'RSCP.Power.W' 			,  1	, false, false],
 
+			// DATABASE VALUES
+			['HEADER'	,800	,'DATABASE'						, ''										, ''									, ''				, 	''						,  1	, false, false],
+			['DB'		,830	,'year_solar_energy'			, 'TAG_DB_HISTORY_DATA_YEAR'				, 'e3dc/year/solar/energy'				, VARIABLETYPE_FLOAT, 	'~Electricity' 			,  1	, false, true],
+			['DB'		,831	,'year_battery_energy_charge'	, 'TAG_DB_HISTORY_DATA_YEAR'				, 'e3dc/year/battery/energy/charge'		, VARIABLETYPE_FLOAT, 	'~Electricity' 			,  1	, false, true],
+			['DB'		,832	,'year_battery_energy_discharge', 'TAG_DB_HISTORY_DATA_YEAR'				, 'e3dc/year/battery/energy/discharge'	, VARIABLETYPE_FLOAT, 	'~Electricity' 			,  1	, false, true],
+			['DB'		,833	,'year_home_energy'				, 'TAG_DB_HISTORY_DATA_YEAR'				, 'e3dc/year/home/energy'				, VARIABLETYPE_FLOAT, 	'~Electricity' 			,  1	, false, true],
+			['DB'		,834	,'year_grid_energy_in'			, 'TAG_DB_HISTORY_DATA_YEAR'				, 'e3dc/year/grid/energy/in'			, VARIABLETYPE_FLOAT, 	'~Electricity' 			,  1	, false, true],
+			['DB'		,835	,'year_grid_energy_out'			, 'TAG_DB_HISTORY_DATA_YEAR'				, 'e3dc/year/grid/energy/out'			, VARIABLETYPE_FLOAT, 	'~Electricity' 			,  1	, false, true],
+
 			// INFO
 			['HEADER'	,900	,'INFO'		 					, ''										, ''									, ''				, 	''						,  1	, false, false],
 			['INFO'		,901	,'system_software'				, 'TAG_INFO_SW_RELEASE'						, 'e3dc/system/software'				, VARIABLETYPE_STRING, 	''  		 			,  1	, false, true],
