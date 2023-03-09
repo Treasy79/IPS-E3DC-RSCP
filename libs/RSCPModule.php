@@ -9,7 +9,6 @@ declare(strict_types=1);
 			parent::Create();
 			$this->ConnectParent('{C6D2AEB3-6E1F-4B2E-8E69-3A1A00246850}');
 
-			//$this->RegisterPropertyString('TOPIC', 'e3dc');
 			$this->RegisterPropertyBoolean('Name', false);
 			$this->RegisterAttributeString('TOPIC', '');
 
