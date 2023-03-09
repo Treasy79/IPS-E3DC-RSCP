@@ -9,7 +9,7 @@ declare(strict_types=1);
 			parent::Create();
 			$this->ConnectParent('{C6D2AEB3-6E1F-4B2E-8E69-3A1A00246850}');
 
-			$this->RegisterPropertyString('TOPIC', 'e3dc');
+			//$this->RegisterPropertyString('TOPIC', 'e3dc');
 			$this->RegisterPropertyBoolean('Name', false);
 			$this->RegisterAttributeString('TOPIC', '');
 
@@ -53,7 +53,7 @@ declare(strict_types=1);
 			$this->Set_Topic();
 
 			//Setze Filter für ReceiveData
-			$MQTTTopic = $this->ReadPropertyString('TOPIC');
+			$MQTTTopic = $this->ReadAttributeString('TOPIC');
 			$this->SetReceiveDataFilter('.*' . $MQTTTopic . '.*');
 	
 			$this->registerProfiles();
@@ -64,7 +64,7 @@ declare(strict_types=1);
 		public function ReceiveData($JSONString)
 		{
 			$this->SendDebug('JSON', $JSONString, 0);
-        	if (!empty($this->ReadPropertyString('TOPIC'))) {
+        	if (!empty($this->ReadAttributeString('TOPIC'))) {
 
 				if ($JSONString == '') {
 					$this->log('No JSON');
