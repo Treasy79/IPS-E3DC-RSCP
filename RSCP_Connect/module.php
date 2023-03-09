@@ -3,8 +3,13 @@
 declare(strict_types=1);
 require_once __DIR__ . '/../libs/RSCPModule.php';
 
+
 	class RSCP2MQTT_Connect extends RSCPModule
-	{
+	{	
+		protected function set_topic()
+		{
+			$this->WriteAttributeString('TOPIC', 'e3dc');
+		}
 		
 
 		/////////// Commands for E3DC RSCP2MQTT /////////////
@@ -22,6 +27,25 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 			$Payload = strval($value);
 			$this->sendMQTT($Topic, $Payload);
 			}
+		}
+		public function activate_pvi_requests(bool $value)
+		{	
+			$Topic = 'e3dc/set/requests/pvi';
+			if ($value)
+				$Payload = '1';
+			else
+				$Payload = '0';
+			$this->sendMQTT($Topic, $Payload);	
+		}
+
+		public function activate_pm_request(bool $value)
+		{
+			$Topic = 'e3dc/set/requests/pm';
+			if ($value)
+				$Payload = '1';
+			else
+				$Payload = '0';
+			$this->sendMQTT($Topic, $Payload);
 		}
 
 		public function set_power_mode_auto()

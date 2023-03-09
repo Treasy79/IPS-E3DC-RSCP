@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 			$this->RegisterPropertyString('TOPIC', 'e3dc');
 			$this->RegisterPropertyBoolean('Name', false);
+			$this->RegisterAttributeString('TOPIC', '');
 
 			$Variables = [];
         	foreach (static::$Variables as $Pos => $Variable) {
@@ -33,6 +34,7 @@ declare(strict_types=1);
 			$this->RegisterPropertyString('Variables', json_encode($Variables));
 			$this->RegisterAttributeString('Variables', json_encode($Variables));
 			$this->SendDebug('Variablen_Create', json_encode($Variables), 0);
+			$this->Set_Topic();
 		}
 
 		public function Destroy()
@@ -48,6 +50,7 @@ declare(strict_types=1);
 			parent::ApplyChanges();
 
 			$this->ConnectParent('{C6D2AEB3-6E1F-4B2E-8E69-3A1A00246850}');
+			$this->Set_Topic();
 
 			//Setze Filter für ReceiveData
 			$MQTTTopic = $this->ReadPropertyString('TOPIC');
