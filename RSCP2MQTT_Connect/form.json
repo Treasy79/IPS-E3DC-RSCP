@@ -9,18 +9,27 @@
             "type": "Tree",
             "name": "Variables",
             "caption": "",
-            "sort": {
-                "column": "Pos",
-                "direction": "ascending"
-            },
             "add": false,
             "delete": false,
             "columns": [
+                {
+                    "caption": "Index",
+                    "name": "id",
+                    "width": "65px",
+                    "save": true
+                },
                 {
                     "caption": "Parent",
                     "name": "parent",
                     "visible": false,
                     "width": "0px",
+                    "save": true
+                },
+                {
+                    "caption": "Namespace",
+                    "name": "Namespace",
+                    "width": "50px",
+                    "visible": false,
                     "save": true
                 },
                 {
@@ -31,34 +40,22 @@
                     "save": true
                 },
                 {
-                    "caption": "Index",
-                    "name": "id",
-                    "width": "65px",
-                    "save": true
-                },
-                {
                     "caption": "Name",
                     "name": "Name",
                     "width": "auto",
                     "save": true
                 },
-                {
-                    "caption": "Namespace",
-                    "name": "Namespace",
-                    "width": "50px",
-                    "save": true
-                },
-                {
+                                {
                     "caption": "Tag",
                     "name": "Tag",
-                    "width": "120",
+                    "width": "120px",
                     "save": true
                 },
                 {
                     "caption": "MQTT",
                     "name": "MQTT",
                     "visible": false,
-                    "width": "auto",
+                    "width": "0px",
                     "save": true
                 },
                 {
