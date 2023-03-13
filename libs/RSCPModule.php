@@ -27,8 +27,8 @@ declare(strict_types=1);
 					'Factor'       	=> $Variable[8],
 					'Action'       	=> $Variable[9],
 					'Keep'         	=> $Variable[10],
-					'rowColor'     	=> $this->set_color($Variable[0]),
-					'editable'     	=> $this->set_editable($Variable[0])
+					'rowColor'     	=> $this->set_color($Variable[2]),
+					'editable'     	=> $this->set_editable($Variable[2])
 				];
         	}	
 			$this->RegisterPropertyString('Variables', json_encode($Variables));
@@ -251,8 +251,8 @@ declare(strict_types=1);
 						'Factor'       	=> $NewVariable[8],
 						'Action'       	=> $NewVariable[9],
 						'Keep'         	=> $NewVariable[10],
-						'rowColor'     	=> $this->set_color($NewVariable[0]),
-						'editable'     	=> $this->set_editable($NewVariable[0])
+						'rowColor'     	=> $this->set_color($NewVariable[2]),
+						'editable'     	=> $this->set_editable($NewVariable[2])
 					];
 				}
 				IPS_SetProperty($this->InstanceID, 'Variables', json_encode($Variables));
