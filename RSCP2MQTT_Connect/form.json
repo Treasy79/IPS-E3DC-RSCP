@@ -6,7 +6,7 @@
             "caption": "Variablen Name mit Namespace anlegen"
         },
         {
-            "type": "List",
+            "type": "Tree",
             "name": "Variables",
             "caption": "",
             "sort": {
@@ -17,6 +17,13 @@
             "delete": false,
             "columns": [
                 {
+                    "caption": "Parent",
+                    "name": "parent",
+                    "visible": false,
+                    "width": "0px",
+                    "save": true
+                },
+                {
                     "caption": "Ident",
                     "name": "Ident",
                     "visible": false,
@@ -25,26 +32,26 @@
                 },
                 {
                     "caption": "Index",
-                    "name": "Pos",
-                    "width": "100px",
+                    "name": "id",
+                    "width": "65px",
                     "save": true
                 },
                 {
                     "caption": "Name",
                     "name": "Name",
-                    "width": "180px",
+                    "width": "auto",
                     "save": true
                 },
                 {
                     "caption": "Namespace",
                     "name": "Namespace",
-                    "width": "120px",
+                    "width": "50px",
                     "save": true
                 },
                 {
                     "caption": "Tag",
                     "name": "Tag",
-                    "width": "auto",
+                    "width": "120",
                     "save": true
                 },
                 {

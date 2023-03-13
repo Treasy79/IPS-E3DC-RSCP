@@ -15,17 +15,18 @@ declare(strict_types=1);
 			$Variables = [];
         	foreach (static::$Variables as $Pos => $Variable) {
 				$Variables[] = [
+					'id'          	=> $Variable[1],
+					'parent'		=> $Variable[2],
 					'Namespace'	  	=> $this->Translate($Variable[0]),
-					'Ident'        	=> str_replace(' ', '', $Variable[2]),
-					'Name'         	=> $this->Translate($Variable[2]),
-					'Tag'		   	=> $Variable[3],
-					'MQTT'		   	=> $Variable[4],
-					'VarType'      	=> $Variable[5],
-					'Profile'      	=> $Variable[6],
-					'Factor'       	=> $Variable[7],
-					'Action'       	=> $Variable[8],
-					'Pos'          	=> $Variable[1],
-					'Keep'         	=> $Variable[9],
+					'Ident'        	=> str_replace(' ', '', $Variable[3]),
+					'Name'         	=> $this->Translate($Variable[3]),
+					'Tag'		   	=> $Variable[4],
+					'MQTT'		   	=> $Variable[5],
+					'VarType'      	=> $Variable[6],
+					'Profile'      	=> $Variable[7],
+					'Factor'       	=> $Variable[8],
+					'Action'       	=> $Variable[9],
+					'Keep'         	=> $Variable[10],
 					'rowColor'     	=> $this->set_color($Variable[0]),
 					'editable'     	=> $this->set_editable($Variable[0])
 				];
@@ -107,19 +108,20 @@ declare(strict_types=1);
 			$Variables = [];
 			foreach ($NewRows as $Pos => $Variable) {
 				$Variables[] = [
+					'id'          	=> $Variable[1],
+					'parent'		=> $Variable[2],
 					'Namespace'	  	=> $this->Translate($Variable[0]),
-					'Ident'      	=> str_replace(' ', '', $Variable[2]),
-					'Name'         	=> $this->Translate($Variable[2]),
-					'Tag'		   	=> $Variable[3],
-					'MQTT'		   	=> $Variable[4],
-					'VarType'      	=> $Variable[5],
-					'Profile'      	=> $Variable[6],
-					'Factor'	   	=> $Variable[7],
-					'Action'       	=> $Variable[8],
-					'Pos'          	=> $Variable[1],
-					'Keep'         	=> $Variable[9],
-					'rowColor'	   	=> $this->set_color($Variable[0]),
-					'editable'     	=> $this->set_editable($Variable[0])
+					'Ident'        	=> str_replace(' ', '', $Variable[3]),
+					'Name'         	=> $this->Translate($Variable[3]),
+					'Tag'		   	=> $Variable[4],
+					'MQTT'		   	=> $Variable[5],
+					'VarType'      	=> $Variable[6],
+					'Profile'      	=> $Variable[7],
+					'Factor'       	=> $Variable[8],
+					'Action'       	=> $Variable[9],
+					'Keep'         	=> $Variable[10],
+					'rowColor'     	=> $this->set_color($Variable[2]),
+					'editable'     	=> $this->set_editable($Variable[2])
 				];
 			}
 			$this->SendDebug("Variabel_Reset", json_encode($Variables) ,0 );
@@ -221,12 +223,12 @@ declare(strict_types=1);
 			$this->SendDebug('Variablen_Reg1', $this->ReadPropertyString('Variables'), 0);
 			$Variables = json_decode($this->ReadPropertyString('Variables'), true);
 			foreach ($Variables as $pos => $Variable) {
-				@$this->MaintainVariable($Variable['Ident'], $this->set_name($Variable['Namespace'], $Variable['Name']), $Variable['VarType'], $Variable['Profile'], $Variable['Pos'], $Variable['Keep']);
+				@$this->MaintainVariable($Variable['Ident'], $this->set_name($Variable['Namespace'], $Variable['Name']), $Variable['VarType'], $Variable['Profile'], $Variable['id'], $Variable['Keep']);
 				if ($Variable['Action'] && $Variable['Keep']) {
 					$this->EnableAction($Variable['Ident']);
 				}
 				foreach ($NewRows as $Index => $Row) {
-					if ($Variable['Ident'] == str_replace(' ', '', $Row[2])) {
+					if ($Variable['Ident'] == str_replace(' ', '', $Row[3])) {
 						unset($NewRows[$Index]);
 					}
 				}
@@ -237,19 +239,20 @@ declare(strict_types=1);
 			if (count($NewRows) != 0) {
 				foreach ($NewRows as $NewVariable) {
 					$Variables[] = [
+						'id'          	=> $NewVariable[1],
+						'parent'		=> $NewVariable[2],
 						'Namespace'	  	=> $this->Translate($NewVariable[0]),
-						'Ident'        => str_replace(' ', '', $NewVariable[2]),
-						'Name'         => $this->Translate($NewVariable[2]),
-						'Tag'		   => $NewVariable[3],
-						'MQTT'		   => $NewVariable[4],
-						'VarType'      => $NewVariable[5],
-						'Profile'      => $NewVariable[6],
-						'Factor'       => $NewVariable[7],
-						'Action'       => $NewVariable[8],
-						'Pos'          => $NewVariable[1],
-						'Keep'         => $NewVariable[9],
-						'rowColor'	   => $this->set_color($NewVariable[0]),
-						'editable'     => $this->set_editable($NewVariable[0])
+						'Ident'        	=> str_replace(' ', '', $NewVariable[3]),
+						'Name'         	=> $this->Translate($NewVariable[3]),
+						'Tag'		   	=> $NewVariable[4],
+						'MQTT'		   	=> $NewVariable[5],
+						'VarType'      	=> $NewVariable[6],
+						'Profile'      	=> $NewVariable[7],
+						'Factor'       	=> $NewVariable[8],
+						'Action'       	=> $NewVariable[9],
+						'Keep'         	=> $NewVariable[10],
+						'rowColor'     	=> $this->set_color($NewVariable[0]),
+						'editable'     	=> $this->set_editable($NewVariable[0])
 					];
 				}
 				IPS_SetProperty($this->InstanceID, 'Variables', json_encode($Variables));
@@ -260,9 +263,9 @@ declare(strict_types=1);
 			
 		}
 
-		private function set_color($ident)
+		private function set_color(int $parent)
 		{
-			if ($ident == 'HEADER'){
+			if ($parent == 0){
 				return '#FFFFC0';
 			}
 			else{
@@ -270,9 +273,9 @@ declare(strict_types=1);
 			}	
 		}
 
-		private function set_editable($ident)
+		private function set_editable(int $parent)
 		{
-			if ($ident == 'HEADER'){
+			if ($parent == 0){
 				return false;
 			}
 			else{
