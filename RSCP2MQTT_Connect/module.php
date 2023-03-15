@@ -6,9 +6,14 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 
 	class RSCP2MQTT_Connect extends RSCPModule
 	{	
+		//Topic als Konstante definieren
+		const TOPIC = 'e3dc';
+
+		
 		protected function set_topic()
 		{
 			$this->WriteAttributeString('TOPIC', 'e3dc');
+			$this->SendDebug('TOPIC Attribute Value', $this->ReadAttributeString('TOPIC'), 0);
 		}
 		
 

@@ -10,7 +10,7 @@ declare(strict_types=1);
 			$this->ConnectParent('{C6D2AEB3-6E1F-4B2E-8E69-3A1A00246850}');
 
 			$this->RegisterPropertyBoolean('Name', false);
-			$this->RegisterAttributeString('TOPIC', '');
+			//$this->RegisterAttributeString('TOPIC', '');
 
 			$Variables = [];
         	foreach (static::$Variables as $Pos => $Variable) {
@@ -34,7 +34,7 @@ declare(strict_types=1);
 			$this->RegisterPropertyString('Variables', json_encode($Variables));
 			$this->RegisterAttributeString('Variables', json_encode($Variables));
 			$this->SendDebug('Variablen_Create', json_encode($Variables), 0);
-			$this->Set_Topic();
+			//$this->Set_Topic();
 		}
 
 		public function Destroy()
@@ -50,11 +50,12 @@ declare(strict_types=1);
 			parent::ApplyChanges();
 
 			$this->ConnectParent('{C6D2AEB3-6E1F-4B2E-8E69-3A1A00246850}');
-			$this->Set_Topic();
+			//$this->Set_Topic();
 
 			//Setze Filter für ReceiveData
-			$MQTTTopic = $this->ReadAttributeString('TOPIC');
-			$this->SetReceiveDataFilter('.*' . $MQTTTopic . '.*');
+				//$MQTTTopic = $this->ReadAttributeString('TOPIC');
+				//$this->SetReceiveDataFilter('.*' . $MQTTTopic . '.*');
+				$this->SetReceiveDataFilter('.*' . static::TOPIC . '.*');
 	
 			$this->registerProfiles();
 			$this->registerVariables();
@@ -64,7 +65,8 @@ declare(strict_types=1);
 		public function ReceiveData($JSONString)
 		{
 			$this->SendDebug('JSON', $JSONString, 0);
-        	if (!empty($this->ReadAttributeString('TOPIC'))) {
+        	//if (!empty($this->ReadAttributeString('TOPIC'))) {
+			if (!empty(static::TOPIC)) {
 
 				if ($JSONString == '') {
 					$this->log('No JSON');
