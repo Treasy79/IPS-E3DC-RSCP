@@ -225,9 +225,11 @@ declare(strict_types=1);
 			$this->SendDebug('Variablen_Reg1', $this->ReadPropertyString('Variables'), 0);
 			$Variables = json_decode($this->ReadPropertyString('Variables'), true);
 			foreach ($Variables as $pos => $Variable) {
-				@$this->MaintainVariable($Variable['Ident'], $this->set_name($Variable['Namespace'], $Variable['Name']), $Variable['VarType'], $Variable['Profile'], $Variable['id'], $Variable['Keep']);
-				if ($Variable['Action'] && $Variable['Keep']) {
-					$this->EnableAction($Variable['Ident']);
+				if ($Variable['parent'] != 0){
+					@$this->MaintainVariable($Variable['Ident'], $this->set_name($Variable['Namespace'], $Variable['Name']), $Variable['VarType'], $Variable['Profile'], $Variable['id'], $Variable['Keep']);
+					if ($Variable['Action'] && $Variable['Keep']) {
+						$this->EnableAction($Variable['Ident']);
+					}
 				}
 				foreach ($NewRows as $Index => $Row) {
 					if ($Variable['Ident'] == str_replace(' ', '', $Row[3])) {
@@ -235,8 +237,6 @@ declare(strict_types=1);
 					}
 				}
 			}
-
-
 
 			if (count($NewRows) != 0) {
 				foreach ($NewRows as $NewVariable) {
