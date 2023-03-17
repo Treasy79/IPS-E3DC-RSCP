@@ -9,15 +9,7 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 		//Topic als Konstante definieren
 		const TOPIC = 'e3dc';
 
-		
-		protected function set_topic()
-		{
-			$this->WriteAttributeString('TOPIC', 'e3dc');
-			$this->SendDebug('TOPIC Attribute Value', $this->ReadAttributeString('TOPIC'), 0);
-		}
-		
-
-		/////////// Commands for E3DC RSCP2MQTT /////////////
+		////////// Commands for E3DC RSCP2MQTT /////////////
 
 		public function force_update()
 		{
