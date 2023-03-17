@@ -134,7 +134,7 @@ declare(strict_types=1);
 			foreach ($Variables as $Variable) {
 				if ($Variable['Keep']){
 					if ( IPS_GetObjectIDByIdent($Variable['Ident'], $this->InstanceID) != false); {
-						IPS_SetPosition(IPS_GetObjectIDByIdent($Variable['Ident'], $this->InstanceID), $Variable['Pos'] );
+						IPS_SetPosition(IPS_GetObjectIDByIdent($Variable['Ident'], $this->InstanceID), $Variable['id'] );
 					}
 				}
 			}
