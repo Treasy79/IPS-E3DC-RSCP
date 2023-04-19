@@ -1,6 +1,8 @@
 <?php
 
 declare(strict_types=1);
+
+require_once __DIR__ . '/Functions.php';
 	class RSCPModule extends IPSModule
 	{
 		public function Create()
