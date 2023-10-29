@@ -1,18 +1,37 @@
 {
     "elements": [
         {
-            "type": "ValidationTextBox",
-            "name": "TOPIC",
-            "caption": "MQTT-Topic",
-            "enabled": false
+            "type": "CheckBox",
+            "name": "Name",
+            "caption": "Variablen Name mit Namespace anlegen"
         },
         {
-            "type": "List",
+            "type": "Tree",
             "name": "Variables",
             "caption": "",
             "add": false,
             "delete": false,
             "columns": [
+                {
+                    "caption": "Index",
+                    "name": "id",
+                    "width": "65px",
+                    "save": true
+                },
+                {
+                    "caption": "Parent",
+                    "name": "parent",
+                    "visible": false,
+                    "width": "0px",
+                    "save": true
+                },
+                {
+                    "caption": "Namespace",
+                    "name": "Namespace",
+                    "width": "50px",
+                    "visible": false,
+                    "save": true
+                },
                 {
                     "caption": "Ident",
                     "name": "Ident",
@@ -21,28 +40,22 @@
                     "save": true
                 },
                 {
-                    "caption": "Index",
-                    "name": "Pos",
-                    "width": "100px",
-                    "save": true
-                },
-                {
                     "caption": "Name",
                     "name": "Name",
-                    "width": "180px",
+                    "width": "auto",
                     "save": true
                 },
-                {
+                                {
                     "caption": "Tag",
                     "name": "Tag",
-                    "width": "auto",
+                    "width": "120px",
                     "save": true
                 },
                 {
                     "caption": "MQTT",
                     "name": "MQTT",
                     "visible": false,
-                    "width": "auto",
+                    "width": "0px",
                     "save": true
                 },
                 {
@@ -81,17 +94,46 @@
                         "caption": "Active",
                         "type": "CheckBox"
                     }
+                },
+                {
+                    "caption": "Color",
+                    "name": "rowColor",
+                    "visible": false,
+                    "width": "0px",
+                    "save": true
+                },
+                {
+                    "caption": "Edit",
+                    "name": "editable",
+                    "visible": false,
+                    "width": "0px",
+                    "save": true
                 }
                     ]
         }
         ],
     "actions": 
     [
-        {
-            "type": "Button",
-            "label": "Reset Variables",
-            "onClick": "RSCP_resetVariables($id);"
-          }
+        { 
+            "type": "RowLayout",
+            "items": [
+                {
+                    "type": "Button",
+                    "label": "Reset Variables",
+                    "onClick": "RSCP2MQTT_resetVariables($id);"
+                },
+                {
+                    "type": "Button",
+                    "label": "Sort Variables",
+                    "onClick": "RSCP2MQTT_update_Variable_position($id);"
+                } ,
+                {
+                    "type": "Button",
+                    "label": "RenameVariables",
+                    "onClick": "RSCP2MQTT_update_Variable_name($id);"
+                } 
+            ]
+        }
     ],
     "status": 
     []
