@@ -119,11 +119,6 @@
             "items": [
                 {
                     "type": "Button",
-                    "label": "Reset Variables",
-                    "onClick": "RSCP2MQTT_resetVariables($id);"
-                },
-                {
-                    "type": "Button",
                     "label": "Sort Variables",
                     "onClick": "RSCP2MQTT_update_Variable_position($id);"
                 } ,
