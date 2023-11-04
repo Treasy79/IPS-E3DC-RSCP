@@ -106,8 +106,18 @@ require_once __DIR__ . '/Functions.php';
 		public function resetVariables()
 		{
 			$NewRows = static::$Variables;
+			$OldRows = json_decode($this->ReadPropertyString('Variables'), true);
+
 			$Variables = [];
 			foreach ($NewRows as $Pos => $Variable) {
+				// Get Keep Status
+				$keep = $Variable[10];
+				foreach ($OldRows as $Index => $Row) {
+					if ($Variable[3] == str_replace(' ', '', $Row['Ident'])) {
+						$keep = $Row['Keep'];
+					}
+				}
+
 				$Variables[] = [
 					'id'          	=> $Variable[1],
 					'parent'		=> $Variable[2],
@@ -120,7 +130,7 @@ require_once __DIR__ . '/Functions.php';
 					'Profile'      	=> $Variable[7],
 					'Factor'       	=> $Variable[8],
 					'Action'       	=> $Variable[9],
-					'Keep'         	=> $Variable[10],
+					'Keep'         	=> $keep,
 					'rowColor'     	=> $this->set_color($Variable[2]),
 					'editable'     	=> $this->set_editable($Variable[2])
 				];
@@ -244,14 +254,19 @@ require_once __DIR__ . '/Functions.php';
 					@$this->MaintainVariable($Variable['Ident'], $this->set_name($Variable['Namespace'], $Variable['Name']), $Variable['VarType'], $Variable['Profile'], $Variable['id'], $Variable['Keep']);
 					if ($Variable['Action'] && $Variable['Keep']) {
 						$this->EnableAction($Variable['Ident']);
-					}
+					}	
 				}
+				 // Add Rowcolor and Editable to TREE -> they are not stored by the System
+					$Variables[$pos]['rowColor']  = $this->set_color($Variable['parent']);
+					$Variables[$pos]['editable']  = $this->set_editable($Variable['parent']);
+
 				foreach ($NewRows as $Index => $Row) {
 					if ($Variable['Ident'] == str_replace(' ', '', $Row[3])) {
 						unset($NewRows[$Index]);
 					}
 				}
 			}
+			$this->SendDebug('Variablen_Reg_2_Color', json_encode($Variables), 0);
 
 			if (count($NewRows) != 0) {
 				foreach ($NewRows as $NewVariable) {
@@ -274,10 +289,9 @@ require_once __DIR__ . '/Functions.php';
 				}
 				IPS_SetProperty($this->InstanceID, 'Variables', json_encode($Variables));
 				$this->SendDebug('Variablen Register', json_encode($Variables), 0);
-				//IPS_ApplyChanges($this->InstanceID);
+				IPS_ApplyChanges($this->InstanceID);
 				return;
         	}
-			
 		}
 
 		private function set_color(int $parent)
