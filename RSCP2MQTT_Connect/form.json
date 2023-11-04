@@ -1,11 +1,6 @@
 {
     "elements": [
         {
-            "type": "CheckBox",
-            "name": "Name",
-            "caption": "Variablen Name mit Namespace anlegen"
-        },
-        {
             "type": "Tree",
             "name": "Variables",
             "caption": "",
@@ -110,6 +105,16 @@
                     "save": true
                 }
                     ]
+        },
+        {
+            "type": "CheckBox",
+            "name": "Name",
+            "caption": "create variables with namespace"
+        },
+        {
+            "name": "EmulateState",
+            "type": "CheckBox",
+            "caption": "emulate state"
         }
         ],
     "actions": 

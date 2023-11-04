@@ -12,6 +12,7 @@ require_once __DIR__ . '/Functions.php';
 			$this->ConnectParent('{C6D2AEB3-6E1F-4B2E-8E69-3A1A00246850}');
 
 			$this->RegisterPropertyBoolean('Name', false);
+			$this->RegisterPropertyBoolean('EmulateState', true);
 			
 			$Variables = [];
         	foreach (static::$Variables as $Pos => $Variable) {
@@ -212,7 +213,23 @@ require_once __DIR__ . '/Functions.php';
 				IPS_SetVariableProfileValues("RSCP.Percent", 0, 100, 1);
 				IPS_SetVariableProfileText("RSCP.Percent", "", "%");
 			}
-
+			if (!IPS_VariableProfileExists('RSCP.Current.A')) {
+				IPS_CreateVariableProfile('RSCP.Current.A', 1);
+				IPS_SetVariableProfileIcon('RSCP.Current.A', '');
+				IPS_SetVariableProfileValues("RSCP.Current.A", 6, 32, 1);
+				IPS_SetVariableProfileText("RSCP.Current.A", "", " A");
+			}
+			if (!IPS_VariableProfileExists('RSCP.ChargePrio')) {
+				IPS_CreateVariableProfile('RSCP.ChargePrio', 0);
+				IPS_SetVariableProfileAssociation("RSCP.ChargePrio", 0, $this->Translate('wallbox first'), "", 0xFFFFFF);
+				IPS_SetVariableProfileAssociation("RSCP.ChargePrio", 1, $this->Translate('battery first'), "", 0xFFFFFF);
+			}
+		
+			if (!IPS_VariableProfileExists('RSCP.YesNo')) {
+				IPS_CreateVariableProfile('RSCP.YesNo', 0);
+				IPS_SetVariableProfileAssociation("RSCP.YesNo", 0, $this->Translate('no'), "", 0xFFFFFF);
+				IPS_SetVariableProfileAssociation("RSCP.YesNo", 1, $this->Translate('yes'), "", 0xFFFFFF);
+			}
 
 		}
 

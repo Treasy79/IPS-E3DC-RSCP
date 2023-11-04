@@ -80,7 +80,28 @@
             "year_grid_energy_in " :  "Jahr - Netz Einspeisung",
             "year_grid_energy_out " :  "Jahr - Netz Bezug",
             "year_autarky " :  "Jahr - Autarky",
-            "year_consumed_production " :  "Jahr - Eigenverbrauch"
+            "year_consumed_production " :  "Jahr - Eigenverbrauch",
+            "wb_all_solar": "Wallbox Leistung Solar",
+            "wb_all_power": "Wallbox Leistung",
+            "wb_battery_to_car_mode" : "Entladung der Hausbatterie durch Wallbox erlaubt",
+            "wb_battery_before_car_mode": "Ladepriorität",
+            "wallbox first": "erst Wallbox",
+            "battery first": "erst Hausbatterie",
+            "wb_device_state": "Status der Wallbox",
+            "wb_pm_active_phases": "Aktive Phasen",
+            "wb_number_used_phases": "anzahl verwendeter Phasen",
+            "wb_max_current": "Wallbox Ladeleistung",
+            "wb_plugged": "Fahrzeug eingesteckt",
+            "wb_locked": "Ladeport verriegelt",
+            "wb_charging": "Fahrzeug lädt",
+            "wb_canceled": "Fahrzeug Ladung abgebrochen",
+            "wb_sun_mode": "Wallbox im Sonnenmodus",
+            "yes": "Ja",
+            "no": "Nein",
+            "wb_battery_discharge_until": "Entleerung des Hausakku durch Wallbox bis SOC",
+            "wb_disable_battery_at_mix_mode":"Entleerung des Hausakkus im Mischmodus verbieten?",
+            "emulate state": "Status emulieren",
+            "create variables with namespace": "Variablen Name mit Namespace anlegen"
         }
     }
 }
