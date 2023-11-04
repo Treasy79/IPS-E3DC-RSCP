@@ -124,7 +124,7 @@
             "items": [
                 {
                     "type": "Button",
-                    "label": "Reset Variables",
+                    "label": "Refresh Variables",
                     "onClick": "RSCP2MQTT_resetVariables($id);"
                 },
                 {
