@@ -39,7 +39,18 @@ Nachdem eine Instanz des Moduls angelegt wurde, muss diese eingerichtet werden.
 
 Da das Modul die Werte direkt von dem MQTT Server als Parent erhält, sind keine weiteren Einstellungen für die Verbindung in der Modul Instanz notwendig.
 
-Für die möglichen Statusvariablen gibt es eine Auswahlliste, in der man Variablen, welche man nicht benötigt, einfach auch abwählen kann.
+### Bestandteile der Instanz Konfiguration
+#### Auswahl Liste
+Für die möglichen Statusvariablen gibt es eine strutkurierte Auswahlliste in Baumstruktur, in der man Variablen, welche man benötigt, einfach auswählen kann kann. Sobald man eine Variable wieder deaktiviert, wird diese auch gelöscht! Also vorsichtig damit umgehen, um nicht geloggte Daten und Objektverweise zu verlieren
+
+#### Variablen Namen mit Namespace anlegen
+Mit dem Schlater kann man entscheiden ob die Variablen im Namen den Namespace vom jeweiligen Knoten (EMA, BATTERY, ...) im Text vorangestellt bekommen, um die Übersichtlichkeit zu verbessern.
+
+#### Button SORT VARIABLES
+Mit dieser Funktion werden die Sortierpositionen der Variablen gemäß der neuen vorgegebenen Deafult Liste aktualisiert.
+
+#### Button RENAME VARIABLES
+Mit dieser Funktion werden die Variablen Namen gemäß der neuen Liste und Überstzung aktualisiert
 
 ## 4. Module
 
@@ -51,6 +62,8 @@ Das Modul "RSCP2MQTT_Connect" dient als Schnittstelle zu einem lokal installiert
 Die RSCP2MQTT Bridge sendet Updates zu den verschiedenen Variablen nur bei Änderung einer Variablen. Somit kann es sein das Variablen länger kein Update erhalten, wenn keine Änderung vorliegt.
 
 Im folgenden werden die verfügbaren Statusvariablen aufgelistet:
+
+!!!! Muss noch ergänzt werden!!!!
 
 	"Leistung PV" 
 	"Leistung Batterie" 
@@ -129,11 +142,3 @@ Dieser Befehl versetzt das Hauskraftwerk in den "NETZLADE" Mode, es wird in dem 
 Über den Parameter $value übergibt man die Ladeleistung in Watt. 
 Über den Parameter $cycles kann man übergeben, für wie viele Intervalle () der Befehl wiederholt werden soll.
 !! Hier wird aus dem NETZ geladen !!
-		
-
-## 5. ChangeLog
-Änderungshistorie
-
-### Version 0.8 Beta
-* Initialer Commit
-  

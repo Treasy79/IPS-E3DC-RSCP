@@ -1,4 +1,4 @@
-### IP-Symcon Modul für die Steuerung des E3DC Hauskraftwerkes über das RSCP Protokoll
+### IP-Symcon Library für die Steuerung des E3DC Hauskraftwerkes über das RSCP Protokoll
  
 Die Nutzung des Moduls geschieht auf eigene Gefahr ohne Gewähr.
 
@@ -31,12 +31,18 @@ Das Modul ist im Symcon Modul Store verfügbar und kann von dort einfach install
 
 ### 4.1. RSCP2MQTT_Connect
 Modul um die Steuerung es E3DC Hauskraftwerkes über die RSCP2MQTT Bridge zu implementieren.
-
-### 4.2. RSCPGui_Connect
-Das Modul für RSCPGui ist in Planung und noch nicht verfügbr.		
+https://github.com/Treasy79/IPS-E3DC-RSCP/blob/main/RSCP2MQTT_Connect/README.md
 
 ## 5. ChangeLog
 Änderungshistorie
+
+### Version 1.1 Beta Build 20231113
+* Implementierung Wallbox Funktionen
+* Neue Option zur Emulation der geänderten Variablen Stati
+
+### Version 1.0 Beta Build 20231103
+* Neue Modulstruktur ( zur möglichen Unterstützung von unterschiedlichen RSCP-MQTT Bridges)
+* Variablen Auswahl zum Update der RSCP Werte erfolgt nun strukturiert über eine Tree-Liste
 
 ### Version 0.8 Beta
 * Initialer Commit
