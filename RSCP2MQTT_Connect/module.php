@@ -329,6 +329,7 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 			// DATABASE VALUES
 			['HEADER'	,800	,0 		,'DATABASE'								, ''												, ''										, ''				, 	''						,  1	, false, false],
 			['DB'		,801	,800	,'today_solar_energy'					, 'TAG_DB_HISTORY_DATA_DAY'							, 'e3dc/solar/energy'						, VARIABLETYPE_FLOAT, 	'~Electricity' 			,  1	, false, true],
+			['DB'		,802	,800	,'today_add_energy'						, 'TAG_DB_HISTORY_DATA_DAY'							, 'e3dc/pm_1/energy'						, VARIABLETYPE_FLOAT, 	'~Electricity' 			,  -1	, false, true],
 			['DB'		,803	,800	,'today_battery_energy_charge'			, 'TAG_DB_HISTORY_DATA_DAY'							, 'e3dc/battery/energy/charge'				, VARIABLETYPE_FLOAT, 	'~Electricity' 			,  1	, false, true],
 			['DB'		,804	,800	,'today_battery_energy_discharge'		, 'TAG_DB_HISTORY_DATA_DAY'							, 'e3dc/battery/energy/discharge'			, VARIABLETYPE_FLOAT, 	'~Electricity' 			,  1	, false, true],
 			['DB'		,805	,800	,'today_home_energy'					, 'TAG_DB_HISTORY_DATA_DAY'							, 'e3dc/home/energy'						, VARIABLETYPE_FLOAT, 	'~Electricity' 			,  1	, false, true],
@@ -337,6 +338,7 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 			['DB'		,808	,800	,'today_autarky'						, 'TAG_DB_HISTORY_DATA_DAY'							, 'e3dc/autarky'							, VARIABLETYPE_FLOAT, 	'RSCP.Percent' 			,  1	, false, true],
 			['DB'		,809	,800	,'today_consumed_production'			, 'TAG_DB_HISTORY_DATA_DAY'							, 'e3dc/consumed'							, VARIABLETYPE_FLOAT, 	'RSCP.Percent' 			,  1	, false, true],
 			['DB'		,811	,800	,'yesterday_solar_energy'				, 'TAG_DB_HISTORY_DATA_DAY'							, 'e3dc/yesterday/solar/energy'				, VARIABLETYPE_FLOAT, 	'~Electricity' 			,  1	, false, true],
+			['DB'		,812	,800	,'yesterday_add_energy'					, 'TAG_DB_HISTORY_DATA_DAY'							, 'e3dc/yesterday/pm_1/energy'				, VARIABLETYPE_FLOAT, 	'~Electricity' 			,  -1	, false, true],
 			['DB'		,813	,800	,'yesterday_battery_energy_charge'		, 'TAG_DB_HISTORY_DATA_DAY'							, 'e3dc/yesterday/battery/energy/charge'	, VARIABLETYPE_FLOAT, 	'~Electricity' 			,  1	, false, true],
 			['DB'		,814	,800	,'yesterday_battery_energy_discharge'	, 'TAG_DB_HISTORY_DATA_DAY'							, 'e3dc/yesterday/battery/energy/discharge'	, VARIABLETYPE_FLOAT, 	'~Electricity' 			,  1	, false, true],
 			['DB'		,815	,800	,'yesterday_home_energy'				, 'TAG_DB_HISTORY_DATA_DAY'							, 'e3dc/yesterday/home/energy'				, VARIABLETYPE_FLOAT, 	'~Electricity' 			,  1	, false, true],
