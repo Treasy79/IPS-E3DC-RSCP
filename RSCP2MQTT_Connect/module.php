@@ -204,6 +204,22 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 			$this->sendMQTT($Topic, $Payload);	
 		}
 
+		public function set_wb_number_of_phases(int $value)
+		{            
+			$Topic = 'e3dc/set/wallbox/number_phases';
+			$Payload = strval($value);
+			$this->sendMQTT($Topic, $Payload);	
+		}
+
+		public function set_wb_index(int $value)
+		{            
+			$Topic = 'e3dc/set/wallbox/index';
+			$Payload = strval($value);
+			$this->sendMQTT($Topic, $Payload);	
+		}
+
+
+
 		public function RequestAction($Ident, $Value)
 		{
 			switch ($Ident){
@@ -262,12 +278,22 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 					if ($this->ReadPropertyBoolean('EmulateState')){$this->SetValue($Ident, $Value);}
 				break;	
 
+				case "wb_number_phases":
+					$this->set_wb_number_of_phases($Value);
+					if ($this->ReadPropertyBoolean('EmulateState')){$this->SetValue($Ident, $Value);}
+				break;	
+
+				case "wb_index":
+					$this->set_wb_index($Value);
+					if ($this->ReadPropertyBoolean('EmulateState')){$this->SetValue($Ident, $Value);}
+				break;	
+
 				default:
 					throw new Exception("Invalid Ident");
 
 			}
 		}
-
+			
 		// Mapping Definition für die MQTT Werte - RSCP2MQTT
 		public static $Variables = [
 		// 	NSPACE  	POS	 PARENT		IDENT									RSCP TAG 											MQTT Topic									Variablen Typ			Var Profil	  			Faktor  ACTION  KEEP
@@ -301,30 +327,69 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 			['BAT'		,201	,200	,'battery_rsoc'							, 'TAG_BAT_RSOC'									, 'e3dc/battery/rsoc'						, VARIABLETYPE_FLOAT, 	'RSCP.SOC'				,  1	, false, true],
 			['BAT'		,202	,200	,'battery_cycles'						, 'TAG_BAT_CHARGE_CYCLES'							, 'e3dc/battery/cycles'						, VARIABLETYPE_INTEGER, ''  		 			,  1	, false, true],
 			['BAT'		,203	,200	,'battery_status'						, 'TAG_BAT_STATUS_CODE'								, 'e3dc/battery/status'						, VARIABLETYPE_INTEGER, ''  		 			,  1	, false, true],
+			['BAT'		,204	,200	,'battery_soc'							, 'TAG_BAT_SOC'										, 'e3dc/battery/soc'						, VARIABLETYPE_FLOAT, 	'RSCP.SOC'				,  1	, false, true],
 			
 			// PVI
 			['HEADER'	,300	,0		,'PVI'									, ''												, ''										, ''				, 	''						,  1	, false, false],
-			['PVI'		,301	,300	,'pvi_power_string1'					, 'TAG_PVI_DC_POWER'								, 'e3dc/pvi/power/string_1'					, VARIABLETYPE_FLOAT, 	'RSCP.Power.W' 			,  1	, false, false],
-			['PVI'		,302	,300	,'pvi_power_string2'					, 'TAG_PVI_DC_POWER'								, 'e3dc/pvi/power/string_2'					, VARIABLETYPE_FLOAT, 	'RSCP.Power.W' 			,  1	, false, false],
-
+			['PVI'		,301	,300	,'pvi_power_string1'					, 'TAG_PVI_DC_POWER'								, 'e3dc/pvi/power/string_1'					, VARIABLETYPE_FLOAT, 	'RSCP.Power.W' 			,  1	, false, true],
+			['PVI'		,302	,300	,'pvi_power_string2'					, 'TAG_PVI_DC_POWER'								, 'e3dc/pvi/power/string_2'					, VARIABLETYPE_FLOAT, 	'RSCP.Power.W' 			,  1	, false, true],
+			['PVI'		,303	,300	,'pvi_power_string_1'					, 'TAG_PVI_DC_POWER'								, 'e3dc/pvi/power/string_1'					, VARIABLETYPE_FLOAT,	'RSCP.Power.W'			,  1	, false, true],
+			['PVI'		,304	,300	,'pvi_power_string_2'					, 'TAG_PVI_DC_POWER'								, 'e3dc/pvi/power/string_2'					, VARIABLETYPE_FLOAT,	'RSCP.Power.W'			,  1	, false, true],
+			['PVI'		,305	,300	,'pvi_voltage_string_1'					, 'TAG_PVI_DC_VOLTAGE'								, 'e3dc/pvi/voltage/string_1'				, VARIABLETYPE_FLOAT,	'~Volt'					,  1	, false, true],
+			['PVI'		,306	,300	,'pvi_voltage_string_2'					, 'TAG_PVI_DC_VOLTAGE'								, 'e3dc/pvi/voltage/string_2'				, VARIABLETYPE_FLOAT,	'~Volt'					,  1	, false, true],
+			['PVI'		,307	,300	,'pvi_current_string_1'					, 'TAG_PVI_DC_CURRENT'								, 'e3dc/pvi/current/string_1'				, VARIABLETYPE_FLOAT,	'~Ampere'				,  1	, false, true],
+			['PVI'		,308	,300	,'pvi_current_string_2'					, 'TAG_PVI_DC_CURRENT'								, 'e3dc/pvi/current/string_2'				, VARIABLETYPE_FLOAT,	'~Ampere'				,  1	, false, true],
+			['PVI'		,309	,300	,'pvi_energy_all_string_1'				, 'TAG_PVI_DC_STRING_ENERGY_ALL'					, 'e3dc/pvi/energy_all/string_1'			, VARIABLETYPE_FLOAT,	'~Electricity.Wh'		,  1	, false, true],
+			['PVI'		,310	,300	,'pvi_energy_all_string_2'				, 'TAG_PVI_DC_STRING_ENERGY_ALL'					, 'e3dc/pvi/energy_all/string_2'			, VARIABLETYPE_FLOAT,	'~Electricity.Wh'		,  1	, false, true],
+/*			['PVI'		,311	,300	,'pvi_power_L1'							, 'TAG_PVI_AC_POWER'								, 'e3dc/pvi/power/L1'						, VARIABLETYPE_FLOAT,	'RSCP.Power.W'			,  1	, false, true],
+			['PVI'		,312	,300	,'pvi_power_L2'							, 'TAG_PVI_AC_POWER'								, 'e3dc/pvi/power/L2'						, VARIABLETYPE_FLOAT,	'RSCP.Power.W'			,  1	, false, true],
+			['PVI'		,313	,300	,'pvi_power_L3'							, 'TAG_PVI_AC_POWER'								, 'e3dc/pvi/power/L3'						, VARIABLETYPE_FLOAT,	'RSCP.Power.W'			,  1	, false, true],
+			['PVI'		,314	,300	,'pvi_voltage_L1'						, 'TAG_PVI_AC_VOLTAGE'								, 'e3dc/pvi/voltage/L1'						, VARIABLETYPE_FLOAT,	'~Volt'					,  1	, false, true],
+			['PVI'		,315	,300	,'pvi_voltage_L2'						, 'TAG_PVI_AC_VOLTAGE'								, 'e3dc/pvi/voltage/L2'						, VARIABLETYPE_FLOAT,	'~Volt'					,  1	, false, true],
+			['PVI'		,316	,300	,'pvi_voltage_L3'						, 'TAG_PVI_AC_VOLTAGE'								, 'e3dc/pvi/voltage/L3'						, VARIABLETYPE_FLOAT,	'~Volt'					,  1	, false, true],
+			['PVI'		,317	,300	,'pvi_current_L1'						, 'TAG_PVI_AC_CURRENT'								, 'e3dc/pvi/current/L1'						, VARIABLETYPE_FLOAT,	'~Ampere'				,  1	, false, true],
+			['PVI'		,318	,300	,'pvi_current_L2'						, 'TAG_PVI_AC_CURRENT'								, 'e3dc/pvi/current/L2'						, VARIABLETYPE_FLOAT,	'~Ampere'				,  1	, false, true],
+			['PVI'		,319	,300	,'pvi_current_L3'						, 'TAG_PVI_AC_CURRENT'								, 'e3dc/pvi/current/L3'						, VARIABLETYPE_FLOAT,	'~Ampere'				,  1	, false, true],
+			['PVI'		,320	,300	,'pvi_apparent_power_L1'				, 'TAG_PVI_AC_APPARENTPOWER'						, 'e3dc/pvi/apparent_power/L1'				, VARIABLETYPE_FLOAT,	'RSCP.Power.VA'			,  1	, false, true],
+			['PVI'		,321	,300	,'pvi_apparent_power_L2'				, 'TAG_PVI_AC_APPARENTPOWER'						, 'e3dc/pvi/apparent_power/L2'				, VARIABLETYPE_FLOAT,	'RSCP.Power.VA'			,  1	, false, true],
+			['PVI'		,322	,300	,'pvi_apparent_power_L3'				, 'TAG_PVI_AC_APPARENTPOWER'						, 'e3dc/pvi/apparent_power/L3'				, VARIABLETYPE_FLOAT,	'RSCP.Power.VA'			,  1	, false, true],
+			['PVI'		,323	,300	,'pvi_reactive_power_L1'				, 'TAG_PVI_AC_REACTIVEPOWER'						, 'e3dc/pvi/reactive_power/L1'				, VARIABLETYPE_FLOAT,	'RSCP.Power.VAR'		,  1	, false, true],
+			['PVI'		,324	,300	,'pvi_reactive_power_L2'				, 'TAG_PVI_AC_REACTIVEPOWER'						, 'e3dc/pvi/reactive_power/L2'				, VARIABLETYPE_FLOAT,	'RSCP.Power.VAR'		,  1	, false, true],
+			['PVI'		,325	,300	,'pvi_reactive_power_L3'				, 'TAG_PVI_AC_REACTIVEPOWER'						, 'e3dc/pvi/reactive_power/L3'				, VARIABLETYPE_FLOAT,	'RSCP.Power.VAR'		,  1	, false, true],
+			['PVI'		,326	,300	,'pvi_energy_all_L1'					, 'TAG_PVI_AC_ENERGY_ALL'							, 'e3dc/pvi/energy_all/L1'					, VARIABLETYPE_FLOAT,	'~Electricity.Wh'		,  1	, false, true],
+			['PVI'		,327	,300	,'pvi_energy_all_L2'					, 'TAG_PVI_AC_ENERGY_ALL'							, 'e3dc/pvi/energy_all/L2'					, VARIABLETYPE_FLOAT,	'~Electricity.Wh'		,  1	, false, true],
+			['PVI'		,328	,300	,'pvi_energy_all_L3'					, 'TAG_PVI_AC_ENERGY_ALL'							, 'e3dc/pvi/energy_all/L3'					, VARIABLETYPE_FLOAT,	'~Electricity.Wh'		,  1	, false, true],
+			['PVI'		,329	,300	,'pvi_max_apparent_power_L1'			, 'TAG_PVI_AC_MAX_APPARENTPOWER'					, 'e3dc/pvi/max_apparent_power/L1'			, VARIABLETYPE_FLOAT,	'RSCP.Power.VA'			,  1	, false, true],
+			['PVI'		,330	,300	,'pvi_max_apparent_power_L2'			, 'TAG_PVI_AC_MAX_APPARENTPOWER'					, 'e3dc/pvi/max_apparent_power/L2'			, VARIABLETYPE_FLOAT,	'RSCP.Power.VA'			,  1	, false, true],
+			['PVI'		,331	,300	,'pvi_max_apparent_power_L3'			, 'TAG_PVI_AC_MAX_APPARENTPOWER'					, 'e3dc/pvi/max_apparent_power/L3'			, VARIABLETYPE_FLOAT,	'RSCP.Power.VA'			,  1	, false, true],
+			['PVI'		,332	,300	,'pvi_energy_day_L1'					, 'TAG_PVI_AC_ENERGY_DAY'							, 'e3dc/pvi/energy_day/L1'					, VARIABLETYPE_FLOAT,	'~Electricity.Wh'		,  1	, false, true],
+			['PVI'		,333	,300	,'pvi_energy_day_L2'					, 'TAG_PVI_AC_ENERGY_DAY'							, 'e3dc/pvi/energy_day/L2'					, VARIABLETYPE_FLOAT,	'~Electricity.Wh'		,  1	, false, true],
+			['PVI'		,334	,300	,'pvi_energy_day_L3'					, 'TAG_PVI_AC_ENERGY_DAY'							, 'e3dc/pvi/energy_day/L3'					, VARIABLETYPE_FLOAT,	'~Electricity.Wh'		,  1	, false, true],
+			['PVI'		,335	,300	,'pvi_energy_grid_consumption_L1'		, 'TAG_PVI_AC_ENERGY_GRID_CONSUMPTION'				, 'e3dc/pvi/energy_grid_consumption/L1'		, VARIABLETYPE_FLOAT,	'~Electricity.Wh'		,  1	, false, true],
+			['PVI'		,336	,300	,'pvi_energy_grid_consumption_L2'		, 'TAG_PVI_AC_ENERGY_GRID_CONSUMPTION'				, 'e3dc/pvi/energy_grid_consumption/L2'		, VARIABLETYPE_FLOAT,	'~Electricity.Wh'		,  1	, false, true],
+			['PVI'		,337	,300	,'pvi_energy_grid_consumption_L3'		, 'TAG_PVI_AC_ENERGY_GRID_CONSUMPTION'				, 'e3dc/pvi/energy_grid_consumption/L3'		, VARIABLETYPE_FLOAT,	'~Electricity.Wh'		,  1	, false, true],
+			['PVI'		,338	,300	,'pvi_frequency'						, 'TAG_PVI_AC_FREQUENCY'							, 'e3dc/pvi/frequency'						, VARIABLETYPE_FLOAT,	'~Hertz.50'				,  1	, false, true],
+			['PVI'		,340	,300	,'pvi_on_grid'							, 'TAG_PVI_DATA'									, 'e3dc/pvi/on_grid'						, VARIABLETYPE_BOOLEAN,	'RSCP.YesNo'			,  1	, false, true],
+*/
 			// Wallbox
 			['HEADER'	,400	,0 		,'WALLBOX'								, ''												, ''										, ''				, 	''						,  1	, false, false],
 			['WB'      ,401    ,400    ,'wb_all_power'							, 'TAG_EMS_POWER_WB_ALL'							, 'e3dc/wallbox/total/power'				, VARIABLETYPE_FLOAT, 	'RSCP.Power.W'	  		,  1    , false, true],
 			['WB'      ,402    ,400    ,'wb_all_solar'							, 'TAG_EMS_POWER_WB_SOLAR'							, 'e3dc/wallbox/solar/power'				, VARIABLETYPE_FLOAT, 	'RSCP.Power.W'			,  1    , false, true],
-			['WB'      ,403    ,400    ,'wb_battery_to_car_mode'				, 'TAG_EMS_BATTERY_TO_CAR_MODE'						, 'e3dc/wallbox/battery_to_car'				, VARIABLETYPE_BOOLEAN, 'RSCP.YesNo'			,  1    , true, true],
-			['WB'      ,404    ,400    ,'wb_battery_before_car_mode'			, 'TAG_EMS_BATTERY_BEFORE_CAR_MODE'					, 'e3dc/wallbox/battery_before_car'			, VARIABLETYPE_BOOLEAN, 'RSCP.ChargePrio'		,  1    , true, true],
+			['WB'      ,403    ,400    ,'wb_battery_to_car_mode'				, 'TAG_EMS_BATTERY_TO_CAR_MODE'						, 'e3dc/wallbox/battery_to_car'				, VARIABLETYPE_BOOLEAN, 'RSCP.YesNo'			,  1    , true,  true],
+			['WB'      ,404    ,400    ,'wb_battery_before_car_mode'			, 'TAG_EMS_BATTERY_BEFORE_CAR_MODE'					, 'e3dc/wallbox/battery_before_car'			, VARIABLETYPE_BOOLEAN, 'RSCP.ChargePrio'		,  1    , true,  true],
 			['WB'      ,405    ,400    ,'wb_device_state'						, 'TAG_WB_DEVICE_STATE'								, 'e3dc/wallbox/status'						, VARIABLETYPE_BOOLEAN,	'RSCP.YesNo'			,  1    , false, true],
 			['WB'      ,406    ,400    ,'wb_pm_active_phases'					, 'TAG_WB_PM_ACTIVE_PHASES'							, 'e3dc/wallbox/active_phases'				, VARIABLETYPE_INTEGER, ''						,  1    , false, true],
 			['WB'      ,407    ,400    ,'wb_number_used_phases'					, 'TAG_WB_EXTERN_DATA'								, 'e3dc/wallbox/number_used_phases'			, VARIABLETYPE_INTEGER, ''						,  1    , false, true],
-			['WB'      ,408    ,400    ,'wb_max_current'						, 'TAG_WB_EXTERN_DATA'								, 'e3dc/wallbox/max_current'				, VARIABLETYPE_INTEGER, 'RSCP.Current.A'		,  1    , true, true],
+			['WB'      ,408    ,400    ,'wb_max_current'						, 'TAG_WB_EXTERN_DATA'								, 'e3dc/wallbox/max_current'				, VARIABLETYPE_INTEGER, 'RSCP.Current.A'		,  1    , true,  true],
 			['WB'      ,409    ,400    ,'wb_plugged'							, 'TAG_WB_EXTERN_DATA'								, 'e3dc/wallbox/plugged'					, VARIABLETYPE_BOOLEAN, 'RSCP.YesNo'			,  1    , false, true],
 			['WB'      ,410    ,400    ,'wb_locked'								, 'TAG_WB_EXTERN_DATA'								, 'e3dc/wallbox/locked'						, VARIABLETYPE_BOOLEAN, 'RSCP.YesNo'			,  1    , false, true],
-			['WB'      ,411    ,400    ,'wb_charging'							, 'TAG_WB_EXTERN_DATA'								, 'e3dc/wallbox/charging'					, VARIABLETYPE_BOOLEAN, 'RSCP.YesNo'			,  1    , true, true],
+			['WB'      ,411    ,400    ,'wb_charging'							, 'TAG_WB_EXTERN_DATA'								, 'e3dc/wallbox/charging'					, VARIABLETYPE_BOOLEAN, 'RSCP.YesNo'			,  1    , true,  true],
 			['WB'      ,412    ,400    ,'wb_canceled'							, 'TAG_WB_EXTERN_DATA'								, 'e3dc/wallbox/canceled'					, VARIABLETYPE_BOOLEAN, 'RSCP.YesNo'			,  1    , false, true],
-			['WB'      ,413    ,400    ,'wb_sun_mode'							, 'TAG_WB_EXTERN_DATA'								, 'e3dc/wallbox/sun_mode'					, VARIABLETYPE_BOOLEAN, 'RSCP.YesNo'			,  1    , true, true],
-			['WB'      ,414    ,400    ,'wb_battery_discharge_until'			, 'TAG_EMS_GET_WB_DISCHARGE_BAT_UNTIL'				, 'e3dc/wallbox/battery_discharge_until'	, VARIABLETYPE_INTEGER, 'RSCP.YesNo'			,  1    , true, true],
-			['WB'      ,415    ,400    ,'wb_disable_battery_at_mix_mode'		, 'TAG_EMS_GET_WALLBOX_ENFORCE_POWER_ASSIGNMENT'	, 'e3dc/wallbox/disable_battery_at_mix_mode', VARIABLETYPE_BOOLEAN, 'RSCP.YesNo' 			,  1    , true, true],
-			
+			['WB'      ,413    ,400    ,'wb_sun_mode'							, 'TAG_WB_EXTERN_DATA'								, 'e3dc/wallbox/sun_mode'					, VARIABLETYPE_BOOLEAN, 'RSCP.YesNo'			,  1    , true,  true],
+			['WB'      ,414    ,400    ,'wb_battery_discharge_until'			, 'TAG_EMS_GET_WB_DISCHARGE_BAT_UNTIL'				, 'e3dc/wallbox/battery_discharge_until'	, VARIABLETYPE_INTEGER, 'RSCP.YesNo'			,  1    , true,  true],
+			['WB'      ,415    ,400    ,'wb_disable_battery_at_mix_mode'		, 'TAG_EMS_GET_WALLBOX_ENFORCE_POWER_ASSIGNMENT'	, 'e3dc/wallbox/disable_battery_at_mix_mode', VARIABLETYPE_BOOLEAN, 'RSCP.YesNo' 			,  1    , true,  true],
+			['WB'      ,416    ,400    ,'wb_number_phases'						, 'TAG_WB_NUMBER_PHASES'							, 'e3dc/wallbox/number_phases'				, VARIABLETYPE_INTEGER, 'RSCP.WB.Phases'		,  1    , false, true],
+			['WB'      ,417    ,400    ,'wb_index'								, 'TAG_WB_INDEX'									, 'e3dc/wallbox/index'						, VARIABLETYPE_INTEGER, ''						,  1    , true,  true],	
 
 			// DATABASE VALUES
 			['HEADER'	,800	,0 		,'DATABASE'								, ''												, ''										, ''				, 	''						,  1	, false, false],

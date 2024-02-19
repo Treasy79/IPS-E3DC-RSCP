@@ -234,11 +234,31 @@ require_once __DIR__ . '/Functions.php';
 				IPS_SetVariableProfileAssociation("RSCP.ChargePrio", 0, $this->Translate('wallbox first'), "", 0xFFFFFF);
 				IPS_SetVariableProfileAssociation("RSCP.ChargePrio", 1, $this->Translate('battery first'), "", 0xFFFFFF);
 			}
-		
+			if (!IPS_VariableProfileExists('RSCP.WB.Phases')) {
+				IPS_CreateVariableProfile('RSCP.WB.Phases', 1);
+				IPS_SetVariableProfileValues("RSCP.WB.Phases", 1, 3, 1);
+				IPS_SetVariableProfileAssociation("RSCP.WB.Phases", 1, $this->Translate('1 Phase'), "", 0xFFFFFF);
+				IPS_SetVariableProfileAssociation("RSCP.WB.Phases", 2, $this->Translate('2 Phases'), "", 0xFFFFFF);
+				IPS_SetVariableProfileAssociation("RSCP.WB.Phases", 3, $this->Translate('3 Phases'), "", 0xFFFFFF);
+			}
 			if (!IPS_VariableProfileExists('RSCP.YesNo')) {
 				IPS_CreateVariableProfile('RSCP.YesNo', 0);
 				IPS_SetVariableProfileAssociation("RSCP.YesNo", 0, $this->Translate('no'), "", 0xFFFFFF);
 				IPS_SetVariableProfileAssociation("RSCP.YesNo", 1, $this->Translate('yes'), "", 0xFFFFFF);
+			}
+			if (!IPS_VariableProfileExists('RSCP.Power.VA')) {
+				IPS_CreateVariableProfile('RSCP.Power.VA', 2);
+				IPS_SetVariableProfileIcon('RSCP.Power.VA', 'Energy');
+				IPS_SetVariableProfileDigits("RSCP.Power.VA", 1);
+				IPS_SetVariableProfileValues("RSCP.Power.VA", 0, 50000, 0 );
+				IPS_SetVariableProfileText("RSCP.Power.VA", "", " VA");
+			}
+			if (!IPS_VariableProfileExists('RSCP.Power.VAR')) {
+				IPS_CreateVariableProfile('RSCP.Power.VAR', 2);
+				IPS_SetVariableProfileIcon('RSCP.Power.VAR', 'Energy');
+				IPS_SetVariableProfileDigits("RSCP.Power.VAR", 1);
+				IPS_SetVariableProfileValues("RSCP.Power.VAR", 0, 50000, 0 );
+				IPS_SetVariableProfileText("RSCP.Power.VAR", "", " VAR");
 			}
 
 		}
@@ -250,7 +270,7 @@ require_once __DIR__ . '/Functions.php';
 			$this->SendDebug('Variablen_Reg1', $this->ReadPropertyString('Variables'), 0);
 			$Variables = json_decode($this->ReadPropertyString('Variables'), true);
 			foreach ($Variables as $pos => $Variable) {
-				if ($Variable['parent'] != 0){
+				if ($Variable['parent'] != 0 and $Variable['Keep']){
 					@$this->MaintainVariable($Variable['Ident'], $this->set_name($Variable['Namespace'], $Variable['Name']), $Variable['VarType'], $Variable['Profile'], $Variable['id'], $Variable['Keep']);
 					if ($Variable['Action'] && $Variable['Keep']) {
 						$this->EnableAction($Variable['Ident']);
