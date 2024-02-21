@@ -20,7 +20,7 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 			// Read actual Tree Property with the stored Data to transfer the Keep Status 
 			$StoredRows = json_decode($this->ReadPropertyString('Variables'), true);
 
-			$Variables = [];
+			$Variables_Form = [];
 			// Process the Static ARRAY with the Variable Definitions
         	foreach (static::$Variables as $Pos => $Variable) {
 
@@ -34,7 +34,7 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 					}
 				}
 
-				$Variables[] = [
+				$Variables_Form[] = [
 					'id'          	=> $Variable[1],
 					'parent'		=> $Variable[2],
 					'Namespace'	  	=> $this->Translate($Variable[0]),
@@ -53,8 +53,8 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 				
         	}
 			// Update Tree Values in the respective Form Array	
-			$jsonform["elements"][0]["values"] = $Variables;
-			IPS_SetProperty($this->InstanceID, 'Variables', '');
+			$jsonform["elements"][0]["values"] = $Variables_Form;
+			IPS_SetProperty($this->InstanceID, 'Variables', json_encode($Variables_Form));
 			$this->SendDebug('RSCP Form_post', json_encode($jsonform),0);
 			return json_encode($jsonform);
 		}
