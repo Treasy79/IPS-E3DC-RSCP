@@ -12,75 +12,75 @@
                     "caption": "Index",
                     "name": "id",
                     "width": "65px",
-                    "save": true
+                    "save": false
                 },
                 {
                     "caption": "Parent",
                     "name": "parent",
                     "visible": false,
                     "width": "0px",
-                    "save": true
+                    "save": false
                 },
                 {
                     "caption": "Namespace",
                     "name": "Namespace",
                     "width": "50px",
                     "visible": false,
-                    "save": true
+                    "save": false
                 },
                 {
                     "caption": "Ident",
                     "name": "Ident",
                     "visible": false,
                     "width": "0px",
-                    "save": true
+                    "save": false
                 },
                 {
                     "caption": "Name",
                     "name": "Name",
                     "width": "auto",
-                    "save": true
+                    "save": false
                 },
                 {
                     "caption": "Tag",
                     "name": "Tag",
                     "width": "120px",
-                    "save": true
+                    "save": false
                 },
                 {
                     "caption": "MQTT",
                     "name": "MQTT",
                     
                     "width": "180px",
-                    "save": true
+                    "save": false
                 },
                 {
                     "caption": "Type",
                     "name": "VarType",
                     "visible": false,
                     "width": "0px",
-                    "save": true
+                    "save": false
                 },
                 {
                     "caption": "Profile",
                     "name": "Profile",
                     "visible": false,
                     "width": "0px",
-                    "save": true
+                    "save": false
                 },
                 {
                     "caption": "Faktor",
                     "name": "Factor",
                     "visible": false,
                     "width": "0px",
-                    "save": true
+                    "save": false
                 },
                 {
                     "caption": "Action",
                     "name": "Action",
                     "visible": false,
                     "width": "0px",
-                    "save": true
+                    "save": false
                 },
                 {
                     "caption": "Active",
@@ -96,14 +96,14 @@
                     "name": "rowColor",
                     "visible": false,
                     "width": "0px",
-                    "save": true
+                    "save": false
                 },
                 {
                     "caption": "Edit",
                     "name": "editable",
                     "visible": false,
                     "width": "0px",
-                    "save": true
+                    "save": false
                 }
                     ]
         },
