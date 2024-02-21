@@ -228,14 +228,16 @@ require_once __DIR__ . '/Functions.php';
 		{
 
 			//$NewRows = static::$Variables;
-			$this->SendDebug('Variablen_Reg1', $this->ReadPropertyString('Variables'), 0);
-			$Variables = json_decode($this->ReadPropertyString('Variables'), true);
-			foreach ($Variables as $pos => $Variable) {
-				if ($Variable['parent'] != 0 and $Variable['Keep'] and $Variable['Namespace'] != 'DCB'){
-					@$this->MaintainVariable($Variable['Ident'], $this->set_name($Variable['Namespace'], $Variable['Name']), $Variable['VarType'], $Variable['Profile'], $Variable['id'], $Variable['Keep']);
-					if ($Variable['Action'] && $Variable['Keep']) {
-						$this->EnableAction($Variable['Ident']);
-					}	
+			if ($this->ReadPropertyString('Variables') != ''){
+				$this->SendDebug('Variablen_Reg1', $this->ReadPropertyString('Variables'), 0);
+				$Variables = json_decode($this->ReadPropertyString('Variables'), true);
+				foreach ($Variables as $pos => $Variable) {
+					if ($Variable['parent'] != 0 and $Variable['Keep'] and $Variable['Namespace'] != 'DCB'){
+						@$this->MaintainVariable($Variable['Ident'], $this->set_name($Variable['Namespace'], $Variable['Name']), $Variable['VarType'], $Variable['Profile'], $Variable['id'], $Variable['Keep']);
+						if ($Variable['Action'] && $Variable['Keep']) {
+							$this->EnableAction($Variable['Ident']);
+						}	
+					}
 				}
 			}	
 /* --> Löschen wenn Restrukturierung des ABlaufs funktioniert
