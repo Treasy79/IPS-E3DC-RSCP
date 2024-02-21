@@ -50,8 +50,8 @@
                 {
                     "caption": "MQTT",
                     "name": "MQTT",
-                    "visible": false,
-                    "width": "0px",
+                    
+                    "width": "180px",
                     "save": true
                 },
                 {
