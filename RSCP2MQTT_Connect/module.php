@@ -497,7 +497,7 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 			['DCB'		,10003	,10000	,'dcb_module_#_cycles'					, 'TAG_BAT_DCB_CYCLE_COUNT'							, 'e3dc/battery/dcb/[1-9]/cycles'			, VARIABLETYPE_INTEGER,	''				  		,  1	, false, false],
 
 			['DCB'		,10050	,10000	,'dcb_module_#_manufacture_name'		, 'TAG_BAT_DCB_MANUFACTURE_NAME'					, 'e3dc/battery/dcb/[1-9]/manufacture_name'	, VARIABLETYPE_STRING,	''				  		,  1	, false, false],
-			['DCB'		,10050	,10000	,'dcb_module_#_serialno'				, 'TAG_BAT_DCB_SERIALNO'							, 'e3dc/battery/dcb/[1-9]/serialno'			, VARIABLETYPE_STRING,	''				  		,  1	, false, false],
+			['DCB'		,10051	,10000	,'dcb_module_#_serialno'				, 'TAG_BAT_DCB_SERIALNO'							, 'e3dc/battery/dcb/[1-9]/serialno'			, VARIABLETYPE_STRING,	''				  		,  1	, false, false],
 
 		];
 	}	
