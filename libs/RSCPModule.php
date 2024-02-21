@@ -82,6 +82,7 @@ require_once __DIR__ . '/Functions.php';
 						}
 						// Battery Moduls Processing for delivered dynamic Index
 						elseif ($Variable['Keep'] and $Variable['Namespace'] == 'DCB'){
+							$this->SendDebug('Battery_Moduls_XXX', $Buffer->Topic, 0);
 							if (fnmatch( $Variable['MQTT'], $Buffer->Topic)) {
 								$this->SendDebug('Battery_Moduls', 'Processing', 0);
 								$this->SendDebug($Variable['MQTT'], $Buffer->Payload, 0);
