@@ -83,11 +83,16 @@ require_once __DIR__ . '/Functions.php';
 						// Battery Moduls Processing for delivered dynamic Index
 						elseif ($Variable['Keep'] and $Variable['Namespace'] == 'DCB'){
 							if (fnmatch( $Variable['MQTT'], $Buffer->Topic)) {
+								$this->SendDebug('Battery_Moduls', 'Processing', 0);
 								$this->SendDebug($Variable['MQTT'], $Buffer->Payload, 0);
 								// Create Ident & Name with dynamic Index from Provided Topic
 								$ident = substr_replace($Variable['Ident'], substr($Buffer->Topic, 17, 1), strpos($Variable['Ident'], '#') ,1);
 								$name  = substr_replace($Variable['Name'], substr($Buffer->Topic, 17, 1), strpos($Variable['Name'], '#') ,1);
 								$id	   = substr_replace($Variable['id'], substr($Buffer->Topic, 17, 1), 3 ,1);
+								$this->SendDebug('ident',$ident,  0);
+								$this->SendDebug('name', $name,  0);
+								$this->SendDebug('id',$id,  0);
+
 								@$this->MaintainVariable($ident, $this->set_name($Variable['Namespace'], $name ), $Variable['VarType'], $Variable['Profile'], $id , $Variable['Keep']);
 					
 								if ($Variable['Factor'] == 1){
