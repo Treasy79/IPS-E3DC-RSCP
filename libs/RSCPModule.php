@@ -279,7 +279,7 @@ require_once __DIR__ . '/Functions.php';
 */
 		}
 
-		private function set_color(int $parent)
+		public function set_color(int $parent)
 		{
 			if ($parent == 0){
 				return '#FFFFC0';
@@ -289,7 +289,7 @@ require_once __DIR__ . '/Functions.php';
 			}	
 		}
 
-		private function set_editable(int $parent)
+		public function set_editable(int $parent)
 		{
 			if ($parent == 0){
 				return false;
