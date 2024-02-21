@@ -33,7 +33,7 @@
                     "name": "Ident",
                     "visible": false,
                     "width": "0px",
-                    "save": false
+                    "save": true
                 },
                 {
                     "caption": "Name",
