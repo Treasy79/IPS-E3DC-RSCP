@@ -113,6 +113,15 @@ Mit dieser Funktion kann man den Wert für die Maximale Entladeleistung des Haus
 #### set_max_charge_power(int $value)
 Mit dieser Funktion kann man den Wert für die Maximale Entladeleistung des Hauskraftwerkes in Watt setzen. Es können Werte in 100 Watt Schritten gesetzt werden. Der Höchstwert hängt vom vorhandenen Hauskraftwerk ab und muss dementsprechend gesetzt werden.
 
+### WALLBOX Funktionen
+Mit diesen Funktionen kann die selektierte Wallbox gesteuert werden.
+
+#### xxx
+
+#### xxxx
+
+#### xxxxx
+
 ### SET_POWER Funktionen
 Mit den SET_Power Funktionen kann man dass EMS direkt beeinflussen. Somit hat man alle Möglichkeiten das Lade/Entladeverhalten des Systems komplett selbst zu steuern. Mit diesen Befehlen werden keine Werte fix im Hauskraftwerk gesetzt, sondern die Werte von diesen Befehlen sind nur wenige Sekunden gültig und müssen daher zur Steuerung ständig wiederholt werden. Kommt nach ca 5 Sekunden nicht ein erneuter Wert, fällt das Hauskraftwerk wieder in seinen normnalen Modus zurück.
 Über den Parameter $cycles kann man übergeben, für wie viele Intervalle () der Befehl wiederholt werden soll.. Somit muss man nicht alle paar Sekunden den Befehl wiederholen, wenn man den Modus und die Leistungswerte nicht ändern will. Die Intervalldauer entspricht der im RSCP2MQTT eingestellten Intervallzeit.  Wenn die Intervalle von einem Befehl noch nicht abgelaufen sind, können diese mit einem neuen Befehl einfach überschrieben werden.

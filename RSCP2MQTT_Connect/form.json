@@ -4,6 +4,7 @@
             "type": "Tree",
             "name": "Variables",
             "caption": "",
+            "loadValuesFromConfiguration": false,
             "add": false,
             "delete": false,
             "columns": [

@@ -14,28 +14,8 @@ require_once __DIR__ . '/Functions.php';
 			$this->RegisterPropertyBoolean('Name', false);
 			$this->RegisterPropertyBoolean('EmulateState', true);
 			
-			$Variables = [];
-        	foreach (static::$Variables as $Pos => $Variable) {
-				$Variables[] = [
-					'id'          	=> $Variable[1],
-					'parent'		=> $Variable[2],
-					'Namespace'	  	=> $this->Translate($Variable[0]),
-					'Ident'        	=> str_replace(' ', '', $Variable[3]),
-					'Name'         	=> $this->Translate($Variable[3]),
-					'Tag'		   	=> $Variable[4],
-					'MQTT'		   	=> $Variable[5],
-					'VarType'      	=> $Variable[6],
-					'Profile'      	=> $Variable[7],
-					'Factor'       	=> $Variable[8],
-					'Action'       	=> $Variable[9],
-					'Keep'         	=> $Variable[10],
-					'rowColor'     	=> $this->set_color($Variable[2]),
-					'editable'     	=> $this->set_editable($Variable[2])
-				];
-        	}	
-			$this->RegisterPropertyString('Variables', json_encode($Variables));
-			//$this->RegisterAttributeString('Variables', json_encode($Variables));
-			$this->SendDebug('Variablen_Create', json_encode($Variables), 0);
+			$this->RegisterPropertyString('Variables', '');
+					
 			
 		}
 
@@ -55,11 +35,11 @@ require_once __DIR__ . '/Functions.php';
 			
 
 			//Setze Filter für ReceiveData
-				$this->SetReceiveDataFilter('.*' . static::TOPIC . '.*');
+			$this->SetReceiveDataFilter('.*' . static::TOPIC . '.*');
 	
 			$this->registerProfiles();
 			$this->registerVariables();
-			//$this->UpdateFormField('Variables', "value", $this->ReadAttributeString('Variables'));
+			
 		}
 
 		public function ReceiveData($JSONString)
@@ -87,7 +67,8 @@ require_once __DIR__ . '/Functions.php';
 				if (property_exists($Buffer, 'Topic')) {
 					$Variables = json_decode($this->ReadPropertyString('Variables'), true);
 					foreach ($Variables as $Variable) {
-						if ($Variable['Keep']){
+						// Normal Topic Processing for static defined Variables
+						if ($Variable['Keep'] and $Variable['Namespace'] != 'DCB'){
 							if (fnmatch( $Variable['MQTT'], $Buffer->Topic)) {
 								$this->SendDebug($Variable['MQTT'], $Buffer->Payload, 0);
 								if ($Variable['Factor'] == 1){
@@ -97,48 +78,28 @@ require_once __DIR__ . '/Functions.php';
 									$this->SetValue($Variable['Ident'], $Buffer->Payload * $Variable['Factor']); 
 								}   	
 							} 
-						}  
+						}
+						// Battery Moduls Processing for delivered dynamic Index
+						elseif ($Variable['Keep'] and $Variable['Namespace'] == 'DCB'){
+							if (fnmatch( $Variable['MQTT'], $Buffer->Topic)) {
+								$this->SendDebug($Variable['MQTT'], $Buffer->Payload, 0);
+								// Create Ident & Name with dynamic Index from Provided Topic
+								$ident = substr_replace($Variable['Ident'], substr($Buffer->Topic, 17, 1), strpos($Variable['Ident'], '#') ,1);
+								$name  = substr_replace($Variable['Name'], substr($Buffer->Topic, 17, 1), strpos($Variable['Name'], '#') ,1);
+								$id	   = substr_replace($Variable['id'], substr($Buffer->Topic, 17, 1), 3 ,1);
+								@$this->MaintainVariable($ident, $this->set_name($Variable['Namespace'], $name ), $Variable['VarType'], $Variable['Profile'], $id , $Variable['Keep']);
+					
+								if ($Variable['Factor'] == 1){
+									$this->SetValue($ident, $Buffer->Payload); 
+								} 
+								else {
+									$this->SetValue($ident, $Buffer->Payload * $Variable['Factor']); 
+								}   	
+							} 
+						}   
 					}
 				}
 			}
-		}
-
-		public function resetVariables()
-		{
-			$NewRows = static::$Variables;
-			$OldRows = json_decode($this->ReadPropertyString('Variables'), true);
-
-			$Variables = [];
-			foreach ($NewRows as $Pos => $Variable) {
-				// Get Keep Status
-				$keep = $Variable[10];
-				foreach ($OldRows as $Index => $Row) {
-					if ($Variable[3] == str_replace(' ', '', $Row['Ident'])) {
-						$keep = $Row['Keep'];
-					}
-				}
-
-				$Variables[] = [
-					'id'          	=> $Variable[1],
-					'parent'		=> $Variable[2],
-					'Namespace'	  	=> $this->Translate($Variable[0]),
-					'Ident'        	=> str_replace(' ', '', $Variable[3]),
-					'Name'         	=> $this->Translate($Variable[3]),
-					'Tag'		   	=> $Variable[4],
-					'MQTT'		   	=> $Variable[5],
-					'VarType'      	=> $Variable[6],
-					'Profile'      	=> $Variable[7],
-					'Factor'       	=> $Variable[8],
-					'Action'       	=> $Variable[9],
-					'Keep'         	=> $keep,
-					'rowColor'     	=> $this->set_color($Variable[2]),
-					'editable'     	=> $this->set_editable($Variable[2])
-				];
-			}
-			$this->SendDebug("Variabel_Reset", json_encode($Variables) ,0 );
-			IPS_SetProperty($this->InstanceID, 'Variables', json_encode($Variables));
-			IPS_ApplyChanges($this->InstanceID);
-			return;
 		}
 
 		public function update_Variable_position()
@@ -266,16 +227,18 @@ require_once __DIR__ . '/Functions.php';
 		private function registerVariables()
 		{
 
-			$NewRows = static::$Variables;
+			//$NewRows = static::$Variables;
 			$this->SendDebug('Variablen_Reg1', $this->ReadPropertyString('Variables'), 0);
 			$Variables = json_decode($this->ReadPropertyString('Variables'), true);
 			foreach ($Variables as $pos => $Variable) {
-				if ($Variable['parent'] != 0 and $Variable['Keep']){
+				if ($Variable['parent'] != 0 and $Variable['Keep'] and $Variable['Namespace'] != 'DCB'){
 					@$this->MaintainVariable($Variable['Ident'], $this->set_name($Variable['Namespace'], $Variable['Name']), $Variable['VarType'], $Variable['Profile'], $Variable['id'], $Variable['Keep']);
 					if ($Variable['Action'] && $Variable['Keep']) {
 						$this->EnableAction($Variable['Ident']);
 					}	
 				}
+/* --> Löschen wenn Restrukturierung des ABlaufs funktioniert
+
 				 // Add Rowcolor and Editable to TREE -> they are not stored by the System
 					$Variables[$pos]['rowColor']  = $this->set_color($Variable['parent']);
 					$Variables[$pos]['editable']  = $this->set_editable($Variable['parent']);
@@ -311,7 +274,8 @@ require_once __DIR__ . '/Functions.php';
 				$this->SendDebug('Variablen Register', json_encode($Variables), 0);
 				IPS_ApplyChanges($this->InstanceID);
 				return;
-        	}
+        	} 
+*/
 		}
 
 		private function set_color(int $parent)
@@ -344,6 +308,7 @@ require_once __DIR__ . '/Functions.php';
 			}
 		}
 
+		
 		protected function sendMQTT($Topic, $Payload)
 		{
 			$mqtt['DataID'] = '{043EA491-0325-4ADD-8FC2-A30C8EEB4D3F}';

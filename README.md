@@ -36,6 +36,11 @@ https://github.com/Treasy79/IPS-E3DC-RSCP/blob/main/RSCP2MQTT_Connect/README.md
 ## 5. ChangeLog
 Änderungshistorie
 
+### Version 1.2 Beta Build 20240218
+* Implementierung weitere Wallbox Funktionen
+* Ergänzung SOC Data ( zusätzlich zu bisherigem RSOC Wert)
+* Deaktivierung des Löschens von unselektierten Variablen
+
 ### Version 1.1 Beta Build 20231113
 * Implementierung Wallbox Funktionen
 * Neue Option zur Emulation der geänderten Variablen Stati
