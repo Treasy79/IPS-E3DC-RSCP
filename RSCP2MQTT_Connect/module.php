@@ -26,9 +26,11 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 
 				// Get Keep Status of stored Dataset from selected Datasets by User
 				$keep = $Variable[10];
-				foreach ($StoredRows as $Index => $Row) {
-					if ($Variable[3] == str_replace(' ', '', $Row['Ident'])) {
-						$keep = $Row['Keep'];
+				if ($this->ReadPropertyString('Variables') != ''){
+					foreach ($StoredRows as $Index => $Row) {
+						if ($Variable[3] == str_replace(' ', '', $Row['Ident'])) {
+							$keep = $Row['Keep'];
+						}
 					}
 				}
 				
