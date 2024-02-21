@@ -237,6 +237,7 @@ require_once __DIR__ . '/Functions.php';
 						$this->EnableAction($Variable['Ident']);
 					}	
 				}
+			}	
 /* --> Löschen wenn Restrukturierung des ABlaufs funktioniert
 
 				 // Add Rowcolor and Editable to TREE -> they are not stored by the System
