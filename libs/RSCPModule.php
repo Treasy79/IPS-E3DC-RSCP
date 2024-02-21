@@ -65,7 +65,7 @@ require_once __DIR__ . '/Functions.php';
 				$this->SendDebug('MQTT Topic', $Buffer->Topic, 0);
 
 				if (property_exists($Buffer, 'Topic')) {
-					$this->SendDebug('MQTT Variablen', $this->ReadPropertyString('Variables'), 0);
+					//$this->SendDebug('MQTT Variablen', $this->ReadPropertyString('Variables'), 0);
 					$Variables = json_decode($this->ReadPropertyString('Variables'), true);
 					foreach ($Variables as $Variable) {
 						// Normal Topic Processing for static defined Variables
