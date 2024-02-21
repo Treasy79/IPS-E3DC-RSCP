@@ -6,7 +6,7 @@
             "caption": "",
             "loadValuesFromConfiguration": false,
             "add": false,
-            "delete": true,
+            "delete": false,
             "columns": [
                 {
                     "caption": "Index",
