@@ -90,7 +90,7 @@ require_once __DIR__ . '/Functions.php';
 								$this->SendDebug('ident', $ident,  0);
 								$name  = substr_replace($Variable['Name'], substr($Buffer->Topic, 17, 1), strpos($Variable['Name'], '#') ,1);
 								$this->SendDebug('name', $name,  0);
-								$id	   = substr_replace($Variable['id'], substr($Buffer->Topic, 17, 1), 3 ,1);
+								$id	   = substr_replace($Variable['id'], substr($Buffer->Topic, 17, 1), 2 ,1);
 								$this->SendDebug('id', $id,  0);
 								
 								@$this->MaintainVariable($ident, $this->set_name($Variable['Namespace'], $name ), $Variable['VarType'], $Variable['Profile'], $id , $Variable['Keep']);
