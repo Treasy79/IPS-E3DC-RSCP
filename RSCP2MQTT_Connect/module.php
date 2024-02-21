@@ -54,7 +54,7 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
         	}
 			// Update Tree Values in the respective Form Array	
 			$jsonform["elements"][0]["values"] = $Variables;
-
+			IPS_SetProperty($this->InstanceID, 'Variables', '');
 			$this->SendDebug('RSCP Form_post', json_encode($jsonform),0);
 			return json_encode($jsonform);
 		}
