@@ -105,7 +105,8 @@
                     "width": "0px",
                     "save": false
                 }
-                    ]
+                    ],
+            "values" : []
         },
         {
             "type": "CheckBox",
