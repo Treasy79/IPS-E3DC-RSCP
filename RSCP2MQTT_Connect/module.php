@@ -15,7 +15,6 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 		{
 			// Read FORM.JSON from directory to adjust Tree Values
 			$jsonform = json_decode(file_get_contents(__DIR__."/form.json"), true);
-			$this->SendDebug('RSCP Form_pre', json_encode($jsonform),0)	;
 
 			// Read actual Tree Property with the stored Data to transfer the Keep Status 
 			$StoredRows = json_decode($this->ReadPropertyString('Variables'), true);
@@ -23,7 +22,6 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 			$Variables_Form = [];
 			// Process the Static ARRAY with the Variable Definitions
         	foreach (static::$Variables as $Pos => $Variable) {
-
 				// Get Keep Status of stored Dataset from selected Datasets by User
 				$keep = $Variable[10];
 				if ($this->ReadPropertyString('Variables') != '' ){
@@ -33,7 +31,6 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 						}
 					}
 				}
-
 				$Variables_Form[] = [
 					'id'          	=> $Variable[1],
 					'parent'		=> $Variable[2],
@@ -50,7 +47,6 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 					'rowColor'     	=> $this->set_color($Variable[2]),
 					'editable'     	=> $this->set_editable($Variable[2])
 				];
-				
         	}
 			// Update Tree Values in the respective Form Array	
 			$jsonform["elements"][0]["values"] = $Variables_Form;
