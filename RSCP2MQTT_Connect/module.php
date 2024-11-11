@@ -436,6 +436,12 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 			['WB'      ,416    ,400    ,'wb_number_phases'						, 'TAG_WB_NUMBER_PHASES'							, 'e3dc/wallbox/number_phases'				, VARIABLETYPE_INTEGER, 'RSCP.WB.Phases'		,  1    , false, false],
 			['WB'      ,417    ,400    ,'wb_index'								, 'TAG_WB_INDEX'									, 'e3dc/wallbox/index'						, VARIABLETYPE_INTEGER, ''						,  1    , true,  false],	
 
+			// PM
+			['HEADER'	,500	,0		,'PM'									, ''												, ''										, ''				, 	''						,  1	, false, false],
+			['PM'		,501	,500	,'pm_power_l1'							, 'TAG_PM_POWER_L1'									, 'e3dc/pm/power/L1'						, VARIABLETYPE_FLOAT, 	'RSCP.Power.W' 			,  1	, false, false],
+			['PM'		,501	,500	,'pm_power_l2'							, 'TAG_PM_POWER_L2'									, 'e3dc/pm/power/L2'						, VARIABLETYPE_FLOAT, 	'RSCP.Power.W' 			,  1	, false, false],
+			['PM'		,503	,500	,'pm_power_l3'							, 'TAG_PM_POWER_L3'									, 'e3dc/pm/power/L3'						, VARIABLETYPE_FLOAT,	'RSCP.Power.W'			,  1	, false, false],
+			
 			// DATABASE VALUES
 			['HEADER'	,800	,0 		,'DATABASE'								, ''												, ''										, ''				, 	''						,  1	, false, false],
 			['DB'		,801	,800	,'today_solar_energy'					, 'TAG_DB_HISTORY_DATA_DAY'							, 'e3dc/solar/energy'						, VARIABLETYPE_FLOAT, 	'~Electricity' 			,  1	, false, false],
